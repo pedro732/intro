@@ -31,7 +31,7 @@ export default {
   methods: {
     async buscarNoticias() {
       const response = await axios.get(`https://api.nytimes.com/svc/mostpopular/v2/emailed/${this.periodo}.json?api-key=uH8o2jLEGywyqdBAZ95JO7L9sA9ATN5x`);
-      console.log(response.data);
+      //console.log(response.data);
       this.noticias = response.data.results;
     }
   }
