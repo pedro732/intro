@@ -1,16 +1,17 @@
 <template>
   <div id="app">
-    <CienciaIntro />
+    
+    <router-view />
   </div>
 </template>
 
 <script>
-import CienciaIntro from './views/intro.vue';
+
 
 export default {
   name: 'App',
   components: {
-    CienciaIntro
+    
   }
 }
 </script>
