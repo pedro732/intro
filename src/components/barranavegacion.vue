@@ -20,7 +20,7 @@
           <a class="nav-link" href="#"><i class="fas fa-envelope"></i> Contacto</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="https://blogeducativo.netlify.app/" target="_blank"><i class="fas fa-flask"></i> Blog educativo</a>
+          <a class="nav-link" href="https://blogeducativo.netlify.app/" target="_blank"><i class="fas fa-book"></i> Blog educativo</a>
 </li>
 
       </ul>
