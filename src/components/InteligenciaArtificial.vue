@@ -4,8 +4,14 @@
     <h2>Pregúntale a la Inteligencia Artificial</h2>
 
     <div class="input-area">
-      <input v-model="userMessage" placeholder="Escribe tu mensaje..." @keyup.enter="sendMessage">
-      <button @click="sendMessage" :disabled="!userMessage.trim()">Enviar a IA</button>
+      <input v-model="userMessage" placeholder="Escribe tu mensaje..." @keyup.enter="sendMessage" :disabled="isLoading">
+      <button @click="sendMessage" :disabled="!userMessage.trim() || isLoading">
+        {{ isLoading ? 'Enviando...' : 'Enviar a IA' }}
+      </button>
+    </div>
+
+    <div v-if="isLoading" class="loading-indicator">
+      Cargando respuesta...
     </div>
 
     <div v-if="iaResponse" class="response-area">
@@ -21,27 +27,26 @@
 </template>
 
 <script>
-// No necesitas importar Mistral aquí, la llamada se hace en la función Netlify
 export default {
   data() {
     return {
       userMessage: '',
       iaResponse: null,
       error: null,
+      isLoading: false, // <-- Nueva variable de estado para la carga
     };
   },
   methods: {
     async sendMessage() {
-      // No enviar si el mensaje está vacío o solo espacios
       if (!this.userMessage.trim()) {
         return;
       }
 
-      this.iaResponse = null; // Limpiar respuesta anterior
-      this.error = null; // Limpiar error anterior
+      this.iaResponse = null;
+      this.error = null;
+      this.isLoading = true; // <-- Iniciar carga
 
       try {
-        // Llama a tu función serverless de Netlify
         const response = await fetch('/.netlify/functions/mistral-chat', {
           method: 'POST',
           headers: {
@@ -53,7 +58,6 @@ export default {
         const data = await response.json();
 
         if (!response.ok) {
-          // Manejar errores HTTP (ej. 400, 500) reportados por la función
           throw new Error(data.message || 'Error al comunicarse con la función.');
         }
 
@@ -62,24 +66,25 @@ export default {
       } catch (err) {
         console.error('Fetch error:', err);
         this.error = err.message;
+      } finally {
+        this.isLoading = false; // <-- Finalizar carga (siempre se ejecuta)
       }
     },
 
     clearResponse() {
       this.iaResponse = null;
       this.error = null;
-      this.userMessage = ''; // También limpia el input al borrar
+      this.userMessage = '';
     },
 
     async copyResponse() {
       if (this.iaResponse) {
         try {
-          // Usa la API del portapapeles del navegador
           await navigator.clipboard.writeText(this.iaResponse);
-          alert('Respuesta copiada al portapapeles!'); // Feedback al usuario
+          alert('Respuesta copiada al portapapeles!');
         } catch (err) {
           console.error('Error al copiar:', err);
-          alert('Error al copiar la respuesta.'); // Feedback de error
+          alert('Error al copiar la respuesta.');
         }
       }
     }
@@ -88,31 +93,31 @@ export default {
 </script>
 
 <style scoped>
-/* Estilos para centrar, fondo y presentación */
+/* Estilos existentes */
 .ia-container {
-  background-color: #f8f9fa; /* Un gris muy claro para destacar */
-  padding: 30px; /* Más espacio interno */
-  margin: 30px auto; /* Centra el bloque y añade margen arriba/abajo */
-  max-width: 800px; /* Ancho máximo para mejor lectura */
-  border-radius: 10px; /* Bordes más redondeados */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
-  font-family: sans-serif; /* Fuente legible */
+  background-color: #f8f9fa;
+  padding: 30px;
+  margin: 30px auto;
+  max-width: 800px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: sans-serif;
 }
 
 .ia-container h2 {
-  color: #343a40; /* Color oscuro para el título */
-  text-align: center; /* Centra el título */
-  margin-bottom: 25px; /* Espacio debajo del título */
+  color: #343a40;
+  text-align: center;
+  margin-bottom: 25px;
 }
 
 .input-area {
-  display: flex; /* Usa flexbox para alinear input y botón */
+  display: flex;
   margin-bottom: 25px;
-  gap: 10px; /* Espacio entre input y botón */
+  gap: 10px;
 }
 
 .input-area input {
-  flex-grow: 1; /* Permite que el input ocupe el espacio disponible */
+  flex-grow: 1;
   padding: 12px 15px;
   border: 1px solid #ced4da;
   border-radius: 5px;
@@ -121,7 +126,7 @@ export default {
 
 .input-area button {
   padding: 12px 20px;
-  background-color: #007bff; /* Azul primario */
+  background-color: #007bff;
   color: white;
   border: none;
   border-radius: 5px;
@@ -135,36 +140,44 @@ export default {
 }
 
 .input-area button:disabled {
-    background-color: #a0c8f5; /* Color más claro cuando está deshabilitado */
+    background-color: #a0c8f5;
     cursor: not-allowed;
+}
+
+/* Nuevo estilo para el indicador de carga */
+.loading-indicator {
+  text-align: center;
+  color: #007bff; /* Color del tema */
+  font-weight: bold;
+  margin-bottom: 20px;
 }
 
 
 .response-area {
-  background-color: #e9ecef; /* Fondo ligeramente más oscuro para la respuesta */
+  background-color: #e9ecef;
   padding: 20px;
   border: 1px solid #dee2e6;
   border-radius: 5px;
-  text-align: left; /* Alinea el texto de respuesta a la izquierda */
+  text-align: left;
   margin-bottom: 20px;
-  white-space: pre-wrap; /* Mantiene saltos de línea y espacios */
-  word-wrap: break-word; /* Rompe palabras largas */
-  color: #495057; /* Color de texto oscuro */
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  color: #495057;
 }
 
 .response-area p {
     margin-top: 0;
-    margin-bottom: 15px; /* Espacio entre el texto y los botones de acción */
+    margin-bottom: 15px;
 }
 
 .response-actions {
-  text-align: right; /* Alinea los botones de acción a la derecha */
+  text-align: right;
 }
 
 .response-actions button {
-  margin-left: 10px; /* Espacio entre los botones de acción */
+  margin-left: 10px;
   padding: 8px 15px;
-  background-color: #6c757d; /* Gris secundario */
+  background-color: #6c757d;
   color: white;
   border: none;
   border-radius: 5px;
@@ -178,7 +191,7 @@ export default {
 }
 
 .error-message {
-  color: #dc3545; /* Rojo para mensajes de error */
+  color: #dc3545;
   text-align: center;
   margin-top: 20px;
   font-weight: bold;
