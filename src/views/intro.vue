@@ -1,7 +1,7 @@
 <template>
     <div id="app">
       <BarraNavegacion />
-      <VistaCarrusel />
+      <CarruselApi/>
       <VistaTarjeta/>
       <inteligencia-artificial/>
       <IndicadoresEconomicos/>
@@ -16,7 +16,7 @@
   
   <script>
   import BarraNavegacion from '../components/barranavegacion.vue'
-  import VistaCarrusel from '../components/carrusel.vue'
+  import CarruselApi from '../components/carruselApi.vue'; // Importa el nuevo componente
   import VistaTarjeta from '../components/tarjetas.vue'
   import InteligenciaArtificial from '@/components/InteligenciaArtificial.vue'
   import IndicadoresEconomicos from '../components/indicadores.vue'
@@ -29,7 +29,7 @@
     name: 'CienciaIntro',
     components: {
       BarraNavegacion,
-      VistaCarrusel,
+     CarruselApi,
       VistaTarjeta,
       IndicadoresEconomicos,
       FotoDelDia,
