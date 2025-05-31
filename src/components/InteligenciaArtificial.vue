@@ -14,7 +14,9 @@
       Cargando respuesta...
     </div>
 
-    <div v-if="iaResponse" class="response-area">
+    <!-- Añade ref="responseArea" a este div -->
+    <div v-if="iaResponse" class="response-area" ref="responseArea">
+      <!-- El texto de la respuesta se insertará aquí -->
       <p>{{ iaResponse }}</p>
       <div class="response-actions">
         <button @click="copyResponse">Copiar</button>
@@ -33,8 +35,28 @@ export default {
       userMessage: '',
       iaResponse: null,
       error: null,
-      isLoading: false, // <-- Nueva variable de estado para la carga
+      isLoading: false,
     };
+  },
+  watch: {
+    // Observa los cambios en iaResponse
+    iaResponse(newValue) {
+      // Si hay una nueva respuesta (no nula)
+      if (newValue) {
+        // Espera a que Vue actualice el DOM
+        this.$nextTick(() => {
+          // Verifica si MathJax está disponible globalmente
+          if (window.MathJax) {
+            // Procesa el contenido del área de respuesta específica
+            // MathJax.typesetPromise() devuelve una promesa
+            window.MathJax.typesetPromise([this.$refs.responseArea])
+              .catch((err) => console.error('MathJax typesetting failed:', err));
+          } else {
+            console.warn('MathJax no está cargado.');
+          }
+        });
+      }
+    }
   },
   methods: {
     async sendMessage() {
@@ -44,7 +66,7 @@ export default {
 
       this.iaResponse = null;
       this.error = null;
-      this.isLoading = true; // <-- Iniciar carga
+      this.isLoading = true;
 
       try {
         const response = await fetch('/.netlify/functions/mistral-chat', {
@@ -67,7 +89,7 @@ export default {
         console.error('Fetch error:', err);
         this.error = err.message;
       } finally {
-        this.isLoading = false; // <-- Finalizar carga (siempre se ejecuta)
+        this.isLoading = false;
       }
     },
 
@@ -93,7 +115,7 @@ export default {
 </script>
 
 <style scoped>
-/* Estilos existentes */
+/* Mantén tus estilos existentes */
 .ia-container {
   background-color: #f8f9fa;
   padding: 30px;
@@ -144,10 +166,9 @@ export default {
     cursor: not-allowed;
 }
 
-/* Nuevo estilo para el indicador de carga */
 .loading-indicator {
   text-align: center;
-  color: #007bff; /* Color del tema */
+  color: #007bff;
   font-weight: bold;
   margin-bottom: 20px;
 }
@@ -160,7 +181,7 @@ export default {
   border-radius: 5px;
   text-align: left;
   margin-bottom: 20px;
-  white-space: pre-wrap;
+  /* white-space: pre-wrap;  -- MathJax puede manejar esto, a veces es mejor dejarlo sin pre-wrap */
   word-wrap: break-word;
   color: #495057;
 }
