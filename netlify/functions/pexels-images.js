@@ -19,7 +19,7 @@ exports.handler = async function(event, context) {
     // Define los parámetros de búsqueda.
     // Puedes hacer una búsqueda por palabras clave o obtener fotos curadas.
     // Para obtener imágenes de "animales, ciencia y tecnología", una búsqueda es más flexible.
-    const query = 'animals, science, technology'; // Palabras clave para la búsqueda
+    const query = 'animals, science, technology,nature,tree,animal'; // Palabras clave para la búsqueda
     const perPage = 30; // Número de imágenes por página (ajusta según necesites)
     const page = 1; // Página de resultados
 
