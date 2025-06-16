@@ -14,7 +14,7 @@
 </router-link>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="https://pedro732.github.io/ciencias/" target="_blank"><i class="fas fa-flask"></i> Ciencia</a>
+          <a class="nav-link" href="https://studio--educacin-y-ciencia.us-central1.hosted.app/blog" target="_blank"><i class="fas fa-flask"></i> Ciencia</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#"><i class="fas fa-envelope"></i> Contacto</a>
