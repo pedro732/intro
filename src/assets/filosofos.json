@@ -13,5 +13,15 @@
     "nombre": "Francis Bacon",
     "imagen": "https://blogmasonico.com/wp-content/uploads/2023/02/francis-bacon.jpg.webp",
     "contribucion": "Formuló el método inductivo, promoviendo que el conocimiento científico debe derivarse de la observación sistemática y la experiencia."
+  },
+  {
+    "nombre": "Karl Popper",
+    "imagen": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Karl_Popper_2.jpg",
+    "contribucion": "Propuso el falsacionismo como criterio de demarcación científica, argumentando que las teorías científicas deben ser susceptibles de ser refutadas mediante la experimentación."
+  },
+  {
+    "nombre": "Thomas Kuhn",
+    "imagen": "https://upload.wikimedia.org/wikipedia/commons/4/4c/Thomas_Kuhn_1970.jpg",
+    "contribucion": "Introdujo el concepto de paradigmas científicos y revoluciones científicas, sugiriendo que el progreso científico no es lineal sino que ocurre a través de cambios radicales en las perspectivas dominantes."
   }
 ]
