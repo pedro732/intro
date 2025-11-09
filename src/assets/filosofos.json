@@ -1,0 +1,17 @@
+[
+  {
+    "nombre": "René Descartes",
+    "imagen": "https://filco.es/uploads/2018/05/top-20officehacks-19-e1524577141234.png",
+    "contribucion": "Defendió la idea de que la razón es el camino hacia la verdad. Su método consiste en la duda metódica y en partir de verdades evidentes para deducir otras."
+  },
+  {
+    "nombre": "Galileo Galilei",
+    "imagen": "https://pymstatic.com/86086/conversions/galileo-galilei-wide_webp.webp",
+    "contribucion": "Padre del método científico moderno. Propuso que el conocimiento debe basarse en la observación, la experimentación y la comprobación empírica."
+  },
+  {
+    "nombre": "Francis Bacon",
+    "imagen": "https://blogmasonico.com/wp-content/uploads/2023/02/francis-bacon.jpg.webp",
+    "contribucion": "Formuló el método inductivo, promoviendo que el conocimiento científico debe derivarse de la observación sistemática y la experiencia."
+  }
+]
