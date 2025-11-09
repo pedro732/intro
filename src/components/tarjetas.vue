@@ -77,19 +77,26 @@ export default {
 
 <style scoped>
 .card {
+  display: inline-block; /* Hace que el tamaño se ajuste al contenido */
   background-color: rgba(255, 255, 255, 0.95);
   border-radius: 15px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: auto; /* El ancho se ajusta al contenido */
+  height: auto; /* La altura crece según texto o imagen */
+  max-width: 90%; /* Evita que crezca demasiado en pantallas grandes */
 }
+
 .card:hover {
   transform: scale(1.02);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 .card-img-top {
-  max-height: 300px;
-  object-fit: cover;
+  width: 100%;
+  height: auto; /* Se ajusta proporcionalmente */
   border-radius: 12px;
+  object-fit: contain; /* Muestra toda la imagen sin recortar */
 }
+
 .alert {
   font-size: 1.1em;
 }
