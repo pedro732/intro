@@ -23,5 +23,12 @@
     "nombre": "Thomas Kuhn",
     "imagen": "https://upload.wikimedia.org/wikipedia/en/8/87/Thomas_Kuhn.jpg",
     "contribucion": "Introdujo el concepto de paradigmas científicos y revoluciones científicas, sugiriendo que el progreso científico no es lineal sino que ocurre a través de cambios radicales en las perspectivas dominantes."
+  },
+  {
+    "nombre": "Círculo de Viena",
+    "imagen": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhc4ugtHLZPwVlacL2L71pQpQVwlb7rnwKipRY-AO70DIYEJD0KpUaYK5VYfoSBZy8J_0cIlS5hjAwg06vUEXzf5aVb-3uo6j2Gl8rxWHPwz6Se0tK2Daf9UxJtN8m4pyKakiKzOXfP8QA_/s1600/Viena.jpg",
+    "contribucion": "El Círculo de Viena** fue un grupo de filósofos y científicos de inicios del siglo XX que defendió el **positivismo lógico**, es decir, la idea de que solo tienen sentido las proposiciones que pueden **verificarse empíricamente** o son **verdades lógicas/matemáticas**. Rechazaron la metafísica por considerarla carente de significado verificable y promovieron una visión **científica, unificada y racional** del conocimiento. Sostuvieron que todo lenguaje debe analizarse con rigor lógico y que la ciencia avanza mediante la clarificación del lenguaje y la eliminación de proposiciones sin contenido empírico."
+
   }
+
 ]
