@@ -49,8 +49,11 @@ export default {
     }
   },
   methods: {
+    normalizeString(str) {
+      return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    },
     buscarFilosofo() {
-      const termino = this.busqueda.toLowerCase().trim()
+      const termino = this.busqueda.trim()
 
       if (termino === '') {
         this.filosofoEncontrado = null
@@ -58,8 +61,10 @@ export default {
         return
       }
 
+      const terminoNormalizado = this.normalizeString(termino)
+
       const encontrado = this.filosofos.find(f =>
-        f.nombre.toLowerCase().includes(termino)
+        this.normalizeString(f.nombre).includes(terminoNormalizado)
       )
 
       if (encontrado) {
