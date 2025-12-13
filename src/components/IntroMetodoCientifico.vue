@@ -13,7 +13,13 @@
           Las mejores hipótesis son aquellas que hacen muchas predicciones que, si se demuestra que son erróneas, conducirán al rechazo o la refutación de la hipótesis.
           (Principios integrales de Zoología, 16ª edición, p.22)
         </p>
-        <button @click="startExplosion">Ingresar</button>
+        <div class="buttons">
+          <button class="btn ingresar" @click="startExplosion">Ingresar</button>
+          <div class="new-button-wrapper">
+            <span class="new-label">¡Nuevo!</span>
+            <button class="btn fisica" @click="openFisica">Física</button>
+          </div>
+        </div>
       </div>
     </div>
   </transition>
@@ -36,6 +42,9 @@ export default {
       // El componente se desmonta después de la animación
       this.$emit("intro-finalizada");
     },
+    openFisica() {
+      window.open('https://cienciafisica.netlify.app/', '_blank');
+    }
   },
 };
 </script>
@@ -81,9 +90,32 @@ p {
   line-height: 1.6;
 }
 
-button {
-  display: block;
-  margin: 2rem auto 0;
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.new-button-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.new-label {
+  color: #ffcc00;
+  font-weight: bold;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.btn {
   background: linear-gradient(135deg, #00c6ff, #0072ff);
   border: none;
   padding: 0.8rem 2rem;
@@ -94,9 +126,13 @@ button {
   transition: all 0.3s ease;
 }
 
-button:hover {
+.btn:hover {
   transform: scale(1.1);
   box-shadow: 0 0 15px rgba(0, 114, 255, 0.6);
+}
+
+.btn.fisica {
+  /* Mismo estilo que .btn.ingresar */
 }
 
 /* Animación inicial */

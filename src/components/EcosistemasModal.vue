@@ -4,7 +4,13 @@
       <div class="modal-content">
         <h2>Estamos preparando este sitio 🌱</h2>
         <p>Pronto podrás explorar contenidos sobre ecosistemas y medio ambiente.</p>
-        <button class="btn" @click="$emit('cerrar')">Continuar</button>
+        <div class="button-container">
+          <button class="btn" @click="$emit('cerrar')">Continuar</button>
+          <div class="new-button-wrapper">
+            <span class="new-label">Nuevo</span>
+            <button class="btn" @click="openFisica">Física</button>
+          </div>
+        </div>
       </div>
     </div>
   </transition>
@@ -17,6 +23,11 @@ export default {
     visible: {
       type: Boolean,
       default: false
+    }
+  },
+  methods: {
+    openFisica() {
+      window.open('https://cienciafisica.netlify.app/', '_blank');
     }
   }
 }
@@ -50,8 +61,32 @@ h2 {
   margin-bottom: 1rem;
 }
 
-.btn {
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
   margin-top: 1.5rem;
+}
+
+.new-button-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.new-label {
+  color: #ffcc00;
+  font-weight: bold;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.btn {
   background: #0072ff;
   color: white;
   border: none;

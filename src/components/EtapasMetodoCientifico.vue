@@ -14,6 +14,10 @@
         <div class="buttons">
           <button class="btn continuar" @click="$emit('continuar')">Continuar</button>
           <button class="btn ecosistemas" @click="$emit('ecosistemas')">Ecosistemas</button>
+          <div class="new-button-wrapper">
+            <span class="new-label">Nuevo</span>
+            <button class="btn fisica" @click="openFisica">Física</button>
+          </div>
         </div>
       </div>
     </div>
@@ -27,6 +31,11 @@ export default {
     visible: {
       type: Boolean,
       default: false
+    }
+  },
+  methods: {
+    openFisica() {
+      window.open('https://cienciafisica.netlify.app/', '_blank');
     }
   }
 }
@@ -87,6 +96,24 @@ li::before {
   gap: 1rem;
 }
 
+.new-button-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.new-label {
+  color: #ffcc00;
+  font-weight: bold;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
 .btn {
   background: #0072ff;
   color: white;
@@ -104,6 +131,10 @@ li::before {
 
 .btn.ecosistemas {
   background: #28a745;
+}
+
+.btn.fisica {
+  background: #ff6b35;
 }
 
 .modal-fade-enter-active,
