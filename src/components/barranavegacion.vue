@@ -22,6 +22,9 @@
         <li class="nav-item">
           <a class="nav-link" href="https://blogeducativo.netlify.app/" target="_blank"><i class="fas fa-book"></i> Blog educativo</a>
 </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://cienciafisica.netlify.app/" target="_blank"><i class="fas fa-atom"></i> Física</a>
+        </li>
 
       </ul>
     </div>
