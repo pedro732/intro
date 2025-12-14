@@ -2,16 +2,9 @@
   <transition name="modal-fade">
     <div v-if="visible" class="modal-overlay">
       <div class="modal-content">
-        <h2>Estamos preparando este sitio 🌱</h2>
-        <p>Ya estamos comenzando a desarrollar gradualmente la página sobre ecosistemas</p>
-        <div class="button-container">
-          <button class="btn" @click="$emit('cerrar')">Continuar</button>
-          <div class="new-button-wrapper">
-            <span class="new-label">Nuevo</span>
-            <button class="btn" @click="openFisica">Física</button>
-          </div>
-          <button class="btn" @click="$emit('abrirEcosistemas2')">Ver Ecología</button>
-        </div>
+        <img src="/assets/ciervo.jpg" alt="Ciervo" class="modal-image" />
+        <p>La palabra "ecología" tiene su origen en los términos griegos oikos, que significa "casa" logos, que significa "estudio". Así, el estudio de la casa ambiental comprende todos los organismos que viven en ella y todos los procesos funcionales que la hacen habitable. Entonces, literalmente, la ecología es el estudio de "la vida en casa", con particular hincapié en "la totalidad o patrón de relaciones entre los organismos y su ambiente", para citar una de las definiciones del Webster's Unabridged Dictionary. (Fundamentos de ecología, p.10, Eugene Odum)</p>
+        <button class="btn" @click="openQuarkCharm">Continuar</button>
       </div>
     </div>
   </transition>
@@ -19,7 +12,7 @@
 
 <script>
 export default {
-  name: 'EcosistemasModal',
+  name: 'EcosistemasModal2',
   props: {
     visible: {
       type: Boolean,
@@ -27,8 +20,8 @@ export default {
     }
   },
   methods: {
-    openFisica() {
-      window.open('https://cienciafisica.netlify.app/', '_blank');
+    openQuarkCharm() {
+      window.open('https://quark-charm.cl/', '_blank');
     }
   }
 }
@@ -45,7 +38,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999;
+  z-index: 10000;
   color: white;
 }
 
@@ -53,39 +46,22 @@ export default {
   background: rgba(30, 30, 30, 0.95);
   padding: 2rem 3rem;
   border-radius: 15px;
-  max-width: 500px;
+  max-width: 600px;
   text-align: center;
   box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
 }
 
-h2 {
+.modal-image {
+  max-width: 50%;
+  height: auto;
+  border-radius: 10px;
   margin-bottom: 1rem;
 }
 
-.button-container {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 1.5rem;
-  flex-wrap: wrap;
-}
-
-.new-button-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.new-label {
-  color: #ffcc00;
-  font-weight: bold;
-  animation: pulse 1s infinite;
-}
-
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); }
+p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
 }
 
 .btn {

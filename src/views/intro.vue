@@ -17,10 +17,17 @@
     <EcosistemasModal
       :visible="mostrarEcosistemas"
       @cerrar="cerrarEcosistemas"
+      @abrirEcosistemas2="mostrarEcosistemas2 = true"
+    />
+
+    <!-- MODAL Ecosistemas2 -->
+    <EcosistemasModal2
+      :visible="mostrarEcosistemas2"
+      @cerrar="mostrarEcosistemas2 = false"
     />
 
     <!-- Página principal -->
-    <div v-show="!mostrarIntro && !mostrarEtapas && !mostrarEcosistemas">
+    <div v-show="!mostrarIntro && !mostrarEtapas && !mostrarEcosistemas && !mostrarEcosistemas2">
       <BarraNavegacion />
       <CarruselApi/>
       <VistaTarjeta/>
@@ -45,6 +52,7 @@ import PieDePagina from '../components/PieDePagina.vue'
 import IntroMetodoCientifico from '../components/IntroMetodoCientifico.vue'
 import EtapasMetodoCientifico from '../components/EtapasMetodoCientifico.vue'
 import EcosistemasModal from '../components/EcosistemasModal.vue'
+import EcosistemasModal2 from '../components/EcosistemasModal2.vue'
 
 export default {
   name: 'CienciaIntro',
@@ -59,13 +67,15 @@ export default {
     InteligenciaArtificial,
     IntroMetodoCientifico,
     EtapasMetodoCientifico,
-    EcosistemasModal
+    EcosistemasModal,
+    EcosistemasModal2
   },
   data() {
     return {
       mostrarIntro: true,
       mostrarEtapas: false,
-      mostrarEcosistemas: false
+      mostrarEcosistemas: false,
+      mostrarEcosistemas2: false
     }
   },
   methods: {
