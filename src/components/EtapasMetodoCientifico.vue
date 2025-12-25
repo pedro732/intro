@@ -12,7 +12,7 @@
           <li>Publicación</li>
         </ul>
         <div class="buttons">
-          <button class="btn continuar" @click="$emit('continuar')">Continuar</button>
+          <button class="btn continuar" @click="$emit('abrirEsquema')">Continuar</button>
           <button class="btn ecosistemas" @click="$emit('ecosistemas')">Ecosistemas</button>
           <div class="new-button-wrapper">
             <span class="new-label">Nuevo</span>

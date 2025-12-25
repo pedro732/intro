@@ -9,7 +9,7 @@
     <!-- MODAL Etapas -->
     <EtapasMetodoCientifico
       :visible="mostrarEtapas"
-      @continuar="mostrarEtapas = false"
+      @abrirEsquema="mostrarEsquema = true"
       @ecosistemas="mostrarEcosistemas = true"
     />
 
@@ -26,8 +26,14 @@
       @cerrar="mostrarEcosistemas2 = false"
     />
 
+    <!-- MODAL EsquemaMetodo -->
+    <EsquemaMetodo
+      :visible="mostrarEsquema"
+      @cerrar="mostrarEsquema = false"
+    />
+
     <!-- Página principal -->
-    <div v-show="!mostrarIntro && !mostrarEtapas && !mostrarEcosistemas && !mostrarEcosistemas2">
+    <div v-show="!mostrarIntro && !mostrarEtapas && !mostrarEcosistemas && !mostrarEcosistemas2 && !mostrarEsquema">
       <BarraNavegacion />
       <CarruselApi/>
       <VistaTarjeta/>
@@ -53,6 +59,7 @@ import IntroMetodoCientifico from '../components/IntroMetodoCientifico.vue'
 import EtapasMetodoCientifico from '../components/EtapasMetodoCientifico.vue'
 import EcosistemasModal from '../components/EcosistemasModal.vue'
 import EcosistemasModal2 from '../components/EcosistemasModal2.vue'
+import EsquemaMetodo from '../components/EsquemaMetodo.vue'
 
 export default {
   name: 'CienciaIntro',
@@ -68,14 +75,16 @@ export default {
     IntroMetodoCientifico,
     EtapasMetodoCientifico,
     EcosistemasModal,
-    EcosistemasModal2
+    EcosistemasModal2,
+    EsquemaMetodo
   },
   data() {
     return {
       mostrarIntro: true,
       mostrarEtapas: false,
       mostrarEcosistemas: false,
-      mostrarEcosistemas2: false
+      mostrarEcosistemas2: false,
+      mostrarEsquema: false
     }
   },
   methods: {
