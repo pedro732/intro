@@ -10,6 +10,7 @@
     <EtapasMetodoCientifico
       :visible="mostrarEtapas"
       @abrirEsquema="mostrarEsquema = true"
+      @cerrarEtapas="mostrarEtapas = false"
       @ecosistemas="mostrarEcosistemas = true"
     />
 
@@ -29,7 +30,7 @@
     <!-- MODAL EsquemaMetodo -->
     <EsquemaMetodo
       :visible="mostrarEsquema"
-      @cerrar="mostrarEsquema = false"
+      @cerrar="cerrarEsquema"
     />
 
     <!-- Página principal -->
@@ -92,6 +93,11 @@ export default {
       this.mostrarEcosistemas = false
       this.mostrarEtapas = false
       this.mostrarIntro = false
+    },
+    cerrarEsquema() {
+      console.log('cerrarEsquema called, mostrarEsquema antes:', this.mostrarEsquema);
+      this.mostrarEsquema = false
+      console.log('cerrarEsquema called, mostrarEsquema después:', this.mostrarEsquema);
     }
   }
 }

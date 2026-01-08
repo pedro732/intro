@@ -12,7 +12,7 @@
           <li>Publicación</li>
         </ul>
         <div class="buttons">
-          <button class="btn continuar" @click="$emit('abrirEsquema')">Continuar</button>
+          <button class="btn continuar" @click="abrirEsquemaYCerrar">Continuar</button>
           <button class="btn ecosistemas" @click="$emit('ecosistemas')">Ecosistemas</button>
           <div class="new-button-wrapper">
             <span class="new-label">Nuevo</span>
@@ -34,6 +34,10 @@ export default {
     }
   },
   methods: {
+    abrirEsquemaYCerrar() {
+      this.$emit('cerrarEtapas');
+      this.$emit('abrirEsquema');
+    },
     openFisica() {
       window.open('https://cienciafisica.netlify.app/', '_blank');
     }

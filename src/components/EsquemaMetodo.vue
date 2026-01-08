@@ -1,9 +1,9 @@
 <template>
   <transition name="modal-fade">
-    <div v-if="visible" class="modal-overlay">
-      <div class="modal-content">
+    <div v-if="visible" class="modal-overlay" @click="handleOverlayClick">
+      <div class="modal-content" @click.stop>
         <img src="/assets/metodo_cientifico.jpg" alt="Método Científico" class="modal-image" />
-        <button class="btn" @click="openQuarkCharm">Continuar</button>
+        <button class="btn" @click="closeModal">Continuar</button>
       </div>
     </div>
   </transition>
@@ -19,8 +19,12 @@ export default {
     }
   },
   methods: {
-    openQuarkCharm() {
-      window.open('https://quark-charm.cl/', '_blank');
+    closeModal() {
+      console.log('closeModal called');
+      this.$emit('cerrar');
+    },
+    handleOverlayClick() {
+      this.closeModal();
     }
   }
 }
