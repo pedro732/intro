@@ -4,7 +4,7 @@
       <div class="modal-content">
         <img src="/assets/ciervo.jpg" alt="Ciervo" class="modal-image" />
         <p>La palabra "ecología" tiene su origen en los términos griegos oikos, que significa "casa" logos, que significa "estudio". Así, el estudio de la casa ambiental comprende todos los organismos que viven en ella y todos los procesos funcionales que la hacen habitable. Entonces, literalmente, la ecología es el estudio de "la vida en casa", con particular hincapié en "la totalidad o patrón de relaciones entre los organismos y su ambiente", para citar una de las definiciones del Webster's Unabridged Dictionary. (Fundamentos de ecología, p.10, Eugene Odum)</p>
-        <button class="btn" @click="openQuarkCharm">Continuar</button>
+        <button class="btn" @click="cerrarTodos">Continuar</button>
       </div>
     </div>
   </transition>
@@ -20,8 +20,8 @@ export default {
     }
   },
   methods: {
-    openQuarkCharm() {
-      window.open('https://quark-charm.cl/', '_blank');
+    cerrarTodos() {
+      this.$emit('cerrarTodos')
     }
   }
 }
@@ -62,6 +62,7 @@ p {
   font-size: 1.1rem;
   line-height: 1.6;
   margin-bottom: 1.5rem;
+  text-align: justify;
 }
 
 .btn {

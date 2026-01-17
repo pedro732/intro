@@ -1,9 +1,24 @@
 <template>
-  <transition name="modal-fade">
-    <div v-if="visible" class="modal-overlay" @click="handleOverlayClick">
-      <div class="modal-content" @click.stop>
-        <img src="/assets/metodo_cientifico.jpg" alt="Método Científico" class="modal-image" />
-        <button class="btn" @click="closeModal">Continuar</button>
+  <transition name="fade">
+    <div v-if="visible" class="sheet-wrapper">
+      <div class="sheet">
+        <header class="sheet-header">
+          <h2>Método Científico</h2>
+          <button class="close" @click="closeModal">✕</button>
+        </header>
+
+        <main class="sheet-body">
+          <img
+            src="/assets/metodo_cientifico.jpg"
+            alt="Método Científico"
+          />
+        </main>
+
+        <footer class="sheet-footer">
+          <button class="btn" @click="closeModal">
+            Continuar
+          </button>
+        </footer>
       </div>
     </div>
   </transition>
@@ -12,90 +27,109 @@
 <script>
 export default {
   name: 'EsquemaMetodo',
-  props: {
-    visible: {
-      type: Boolean,
-      default: false
+  props: { visible: Boolean },
+  watch: {
+    visible(v) {
+      document.body.style.overflow = v ? 'hidden' : ''
     }
+  },
+  beforeUnmount() {
+    document.body.style.overflow = ''
   },
   methods: {
     closeModal() {
-      console.log('closeModal called');
-      this.$emit('cerrar');
-    },
-    handleOverlayClick() {
-      this.closeModal();
+      this.$emit('cerrar')
     }
   }
 }
 </script>
 
+
+
+
+
 <style scoped>
-.modal-overlay {
+.sheet-wrapper {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(10, 10, 10, 0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10001;
-  color: white;
-}
+  inset: 0;
+  background: white;
+  z-index: 10000;
 
-.modal-content {
-  background: rgba(30, 30, 30, 0.95);
-  padding: 2rem 3rem;
-  border-radius: 15px;
-  max-width: 800px;
-  width: 90%;
-  text-align: center;
-  box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+  /* 👇 SCROLL NATIVO */
   overflow-y: auto;
-  max-height: 90vh;
 }
 
-.modal-image {
-  width: 70%;
+/* CONTENIDO */
+.sheet {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* HEADER */
+.sheet-header {
+  position: sticky;
+  top: 0;
+  background: white;
+  padding: 1rem;
+  border-bottom: 1px solid #ddd;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* BODY */
+.sheet-body {
+  flex: 1;
+  padding: 1rem;
+}
+
+.sheet-body img {
+  width: 100%;
   height: auto;
-  border-radius: 10px;
-  margin-bottom: 1rem;
 }
 
-@media (max-width: 768px) {
-  .modal-content {
-    padding: 1rem 1.5rem;
-    max-width: 95%;
-  }
-  .modal-image {
-    width: 90%;
-  }
+/* FOOTER */
+.sheet-footer {
+  padding: 1rem;
+  border-top: 1px solid #ddd;
 }
 
 .btn {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1rem;
+  border-radius: 25px;
   background: #0072ff;
   color: white;
   border: none;
-  padding: 0.7rem 1.5rem;
-  border-radius: 30px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: transform 0.2s ease;
 }
 
-.btn:hover {
-  transform: scale(1.1);
+/* BOTÓN CERRAR */
+.close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
 }
 
-.modal-fade-enter-active,
-.modal-fade-leave-active {
-  transition: opacity 0.4s;
+/* DESKTOP: SE VE COMO MODAL */
+@media (min-width: 768px) {
+  .sheet-wrapper {
+    background: rgba(0, 0, 0, 0.7);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .sheet {
+    max-width: 800px;
+    max-height: 90vh;
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+  }
 }
 
-.modal-fade-enter,
-.modal-fade-leave-to {
-  opacity: 0;
-}
 </style>

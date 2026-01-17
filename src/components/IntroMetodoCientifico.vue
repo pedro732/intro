@@ -66,6 +66,8 @@ export default {
   text-align: justify;
   padding: 2rem;
   font-family: 'Georgia', serif;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .content {
@@ -76,6 +78,9 @@ export default {
   box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(6px);
   animation: fadeIn 1.5s ease;
+  max-height: 90vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 h2 {
@@ -95,6 +100,7 @@ p {
   justify-content: center;
   gap: 1rem;
   margin-top: 2rem;
+  flex-wrap: wrap;
 }
 
 .new-button-wrapper {
@@ -107,6 +113,7 @@ p {
   color: #ffcc00;
   font-weight: bold;
   animation: pulse 1s infinite;
+  font-size: 0.9rem;
 }
 
 @keyframes pulse {
@@ -167,6 +174,106 @@ p {
     opacity: 0;
     transform: scale(3);
     filter: blur(10px);
+  }
+}
+
+/* Tablets y pantallas medianas */
+@media (max-width: 768px) {
+  .overlay {
+    padding: 1rem;
+  }
+  
+  .content {
+    padding: 1.5rem 1.5rem;
+    max-height: 85vh;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.8rem;
+  }
+  
+  p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  
+  .buttons {
+    gap: 0.8rem;
+    margin-top: 1.5rem;
+  }
+  
+  .btn {
+    padding: 0.6rem 1.5rem;
+    font-size: 1rem;
+  }
+}
+
+/* iPhones y dispositivos pequeños */
+@media (max-width: 480px) {
+  .overlay {
+    padding: 0.5rem;
+    align-items: flex-start;
+    padding-top: 1rem;
+  }
+  
+  .content {
+    padding: 1rem 1rem;
+    max-height: calc(100vh - 2rem);
+    width: 100%;
+    margin: 0;
+  }
+  
+  h2 {
+    font-size: 1.3rem;
+    margin-bottom: 0.6rem;
+  }
+  
+  p {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    text-align: left;
+  }
+  
+  .buttons {
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-top: 1rem;
+  }
+  
+  .new-button-wrapper {
+    width: 100%;
+  }
+  
+  .btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.95rem;
+    width: 100%;
+  }
+  
+  .new-label {
+    font-size: 0.8rem;
+  }
+}
+
+/* Pantallas muy pequeñas (< 360px) */
+@media (max-width: 360px) {
+  .content {
+    padding: 0.75rem 0.75rem;
+  }
+  
+  h2 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  p {
+    font-size: 0.85rem;
+  }
+  
+  .btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
   }
 }
 </style>

@@ -25,6 +25,7 @@
     <EcosistemasModal2
       :visible="mostrarEcosistemas2"
       @cerrar="mostrarEcosistemas2 = false"
+      @cerrarTodos="cerrarTodosModales"
     />
 
     <!-- MODAL EsquemaMetodo -->
@@ -95,9 +96,16 @@ export default {
       this.mostrarIntro = false
     },
     cerrarEsquema() {
-      console.log('cerrarEsquema called, mostrarEsquema antes:', this.mostrarEsquema);
+      console.log('cerrarEsquema called, mostrarEsquema antes:', this.mostrarEsquema)
       this.mostrarEsquema = false
-      console.log('cerrarEsquema called, mostrarEsquema después:', this.mostrarEsquema);
+      console.log('cerrarEsquema called, mostrarEsquema después:', this.mostrarEsquema)
+    },
+    cerrarTodosModales() {
+      this.mostrarIntro = false
+      this.mostrarEtapas = false
+      this.mostrarEcosistemas = false
+      this.mostrarEcosistemas2 = false
+      this.mostrarEsquema = false
     }
   }
 }
