@@ -1,13 +1,15 @@
 <template>
     <div>
       <h1 class="text-center">Indicadores Económicos</h1>
-      <div class="d-flex justify-content-around">
+      <div class="d-flex justify-content-around flex-wrap">
         <div class="card" style="width: 18rem;" v-for="(indicator, index) in indicators" :key="index">
           <div class="card-body">
             <h5 class="card-title">{{ indicator.nombre }}</h5>
             <p class="card-text">{{ indicator.simbolo }}{{ indicator.valor }}</p>
           </div>
         </div>
+        <!-- Placeholder mientras carga -->
+        <div v-if="indicators.length === 0" class="text-muted" style="padding: 20px;">Cargando indicadores...</div>
       </div>
       <p>
         Selecciona uno de los indicadores económicos y la fecha que desea consultar
@@ -59,39 +61,63 @@
         indicatorOptions: ['uf', 'ivp', 'dolar', 'dolar_intercambio', 'euro', 'ipc', 'utm', 'imacec', 'tpm', 'libra_cobre', 'tasa_desempleo', 'bitcoin'],
       };
     },
-    async created() {
-      const indicatorsNames = ['uf', 'dolar', 'euro', 'utm'];
-      const symbols = ['$', '$', '€', '$'];
-      const indicatorsData = await Promise.all(
-        indicatorsNames.map((name) =>
-          axios.get(`https://mindicador.cl/api/${name}`).then((res) => res.data)
-        )
-      );
-      this.indicators = indicatorsData.map((data, index) => ({
-        nombre: data.nombre,
-        valor: data.serie[0].valor,
-        simbolo: symbols[index]
-      }));
-
+    mounted() {
+      // Cambiar de created() a mounted() y hacer la carga no bloqueante
+      this.loadIndicators();
     },
     methods: {
-  async getIndicator() {
-    const dateParts = this.selectedDate.split('-');
-    const formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
-    const response = await axios.get(`https://mindicador.cl/api/${this.selectedIndicator}/${formattedDate}`);
-    const data = response.data;
-    if (data.serie && data.serie.length > 0) {
-      this.selectedIndicatorData = {
-        nombre: data.nombre,
-        valor: data.serie[0].valor,
-        simbolo: '$'
-      };
-    } else {
-      console.error('No data available for this date and indicator');
+      async loadIndicators() {
+        try {
+          const indicatorsNames = ['uf', 'dolar', 'euro', 'utm'];
+          const symbols = ['$', '$', '€', '$'];
+          const indicatorsData = await Promise.all(
+            indicatorsNames.map((name) =>
+              axios.get(`https://mindicador.cl/api/${name}`, { timeout: 5000 })
+                .then((res) => res.data)
+                .catch((err) => {
+                  console.warn(`Error cargando ${name}:`, err);
+                  return null;
+                })
+            )
+          );
+          this.indicators = indicatorsData
+            .map((data, index) => {
+              if (data && data.serie && data.serie.length > 0) {
+                return {
+                  nombre: data.nombre,
+                  valor: data.serie[0].valor,
+                  simbolo: symbols[index]
+                };
+              }
+              return null;
+            })
+            .filter(item => item !== null);
+        } catch (error) {
+          console.error('Error al cargar indicadores:', error);
+        }
+      },
+      async getIndicator() {
+        try {
+          const dateParts = this.selectedDate.split('-');
+          const formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+          const response = await axios.get(`https://mindicador.cl/api/${this.selectedIndicator}/${formattedDate}`, { timeout: 5000 });
+          const data = response.data;
+          if (data.serie && data.serie.length > 0) {
+            this.selectedIndicatorData = {
+              nombre: data.nombre,
+              valor: data.serie[0].valor,
+              simbolo: '$'
+            };
+          } else {
+            console.error('No data available for this date and indicator');
+          }
+          var modal = new Modal(document.getElementById('indicadorModal'))
+          modal.show()
+        } catch (error) {
+          console.error('Error al obtener indicador:', error);
+          alert('Error al obtener el indicador. Intenta nuevamente.');
+        }
+      }
     }
-    var modal = new Modal(document.getElementById('indicadorModal'))
-      modal.show()
-  }
-}
   };
   </script>

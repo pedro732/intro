@@ -50,18 +50,20 @@
 
 <script>
 import BarraNavegacion from '../components/barranavegacion.vue'
-import CarruselApi from '../components/carruselApi.vue'
 import VistaTarjeta from '../components/tarjetas.vue'
-import InteligenciaArtificial from '@/components/InteligenciaArtificial.vue'
-import IndicadoresEconomicos from '../components/indicadores.vue'
-import FotoDelDia from '../components/FotodelDia.vue'
-import NoticiaDelDia from '../components/NoticiaDelDia.vue'
 import PieDePagina from '../components/PieDePagina.vue'
 import IntroMetodoCientifico from '../components/IntroMetodoCientifico.vue'
 import EtapasMetodoCientifico from '../components/EtapasMetodoCientifico.vue'
 import EcosistemasModal from '../components/EcosistemasModal.vue'
 import EcosistemasModal2 from '../components/EcosistemasModal2.vue'
 import EsquemaMetodo from '../components/EsquemaMetodo.vue'
+
+// Lazy loading para componentes pesados que se cargan después del scroll
+const CarruselApi = () => import(/* webpackChunkName: "carrusel" */ '../components/carruselApi.vue')
+const InteligenciaArtificial = () => import(/* webpackChunkName: "ia" */ '@/components/InteligenciaArtificial.vue')
+const IndicadoresEconomicos = () => import(/* webpackChunkName: "indicadores" */ '../components/indicadores.vue')
+const FotoDelDia = () => import(/* webpackChunkName: "foto" */ '../components/FotodelDia.vue')
+const NoticiaDelDia = () => import(/* webpackChunkName: "noticia" */ '../components/NoticiaDelDia.vue')
 
 export default {
   name: 'CienciaIntro',

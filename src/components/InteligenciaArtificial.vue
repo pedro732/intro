@@ -69,14 +69,19 @@ export default {
       this.isLoading = true;
 
       try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000); // Timeout de 15 segundos
+
         const response = await fetch('/.netlify/functions/mistral-chat', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({ message: this.userMessage }),
+          signal: controller.signal
         });
 
+        clearTimeout(timeoutId);
         const data = await response.json();
 
         if (!response.ok) {
@@ -84,10 +89,13 @@ export default {
         }
 
         this.iaResponse = data.response;
-        // this.userMessage = ''; // Opcional: limpiar el input después de enviar
       } catch (err) {
         console.error('Fetch error:', err);
-        this.error = err.message;
+        if (err.name === 'AbortError') {
+          this.error = 'Tiempo de espera agotado. Por favor intenta nuevamente.';
+        } else {
+          this.error = err.message;
+        }
       } finally {
         this.isLoading = false;
       }

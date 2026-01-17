@@ -9,14 +9,15 @@
 
     <carousel v-else :autoplay="15000" :wrap-around="true">
       <slide v-for="item in items" :key="item.id">
-        <div class="slide-content"> <!-- Wrapper para la imagen y el caption -->
+        <div class="slide-content">
           <img
             :src="item.image"
+            :srcset="item.image"
             class="d-block w-100"
             :alt="item.alt || 'Imagen de Pexels'"
             loading="lazy"
+            decoding="async"
           />
-          <!-- Caption para mostrar el texto -->
           <div v-if="item.alt" class="carousel-caption">
             <p>{{ item.alt }}</p>
           </div>
@@ -50,8 +51,11 @@ export default {
       error: null,
     };
   },
-  async mounted() {
-    await this.fetchImagesFromNetlifyFunction();
+  mounted() {
+    // Usar nextTick para diferir la carga si es necesario
+    this.$nextTick(() => {
+      this.fetchImagesFromNetlifyFunction();
+    });
   },
   methods: {
     async fetchImagesFromNetlifyFunction() {
@@ -60,8 +64,14 @@ export default {
       this.items = [];
 
       try {
-        const response = await fetch('/.netlify/functions/pexels-images');
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 8000); // Timeout de 8 segundos
 
+        const response = await fetch('/.netlify/functions/pexels-images', {
+          signal: controller.signal
+        });
+
+        clearTimeout(timeoutId);
         const data = await response.json();
 
         if (!response.ok) {
@@ -69,10 +79,11 @@ export default {
         }
 
         if (data.images && data.images.length > 0) {
-          this.items = data.images;
+          // Limitar a 6 imágenes para reducir consumo de memoria
+          this.items = data.images.slice(0, 6);
         } else {
-           console.warn('Netlify Function: No images returned.');
-           this.items = [];
+          console.warn('Netlify Function: No images returned.');
+          this.items = [];
         }
 
       } catch (err) {
@@ -95,7 +106,8 @@ export default {
     background-color: #e9f7ef;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    overflow: hidden; /* Importante para que el zoom no se salga */
+    overflow: hidden;
+    will-change: transform;
 }
 
 .carrusel-api-container h2 {
@@ -104,66 +116,58 @@ export default {
     margin-bottom: 20px;
 }
 
-/* Asegura que cada slide tenga posición relativa para posicionar el caption */
 .carousel__slide {
-  position: relative; /* Necesario para posicionar el caption absoluto */
-  display: flex; /* Usar flexbox para centrar contenido si es necesario */
+  position: relative;
+  display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden; /* Oculta cualquier parte de la imagen que se salga al hacer zoom */
+  overflow: hidden;
+  contain: layout style paint;
 }
 
 .slide-content {
-    position: relative; /* Contenedor para la imagen y el caption */
+    position: relative;
     width: 100%;
-    height: 100%; /* O la altura deseada */
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-
 .carousel__slide img {
-  height: 600px;  /* Ajusta este valor según tus necesidades */
-  width: 100%; /* Asegura que la imagen ocupe el ancho del contenedor */
+  height: 400px;
+  width: 100%;
   object-fit: cover;
-  transition: transform 0.5s ease; /* Transición suave para el zoom */
+  transition: transform 0.3s ease;
+  will-change: transform;
 }
 
-/* Efecto de zoom al pasar el ratón */
+@media (max-width: 768px) {
+  .carousel__slide img {
+    height: 250px;
+  }
+}
+
 .carousel__slide:hover img {
-  transform: scale(1.05); /* Aumenta el tamaño de la imagen un 5% */
+  transform: scale(1.05);
 }
 
-/* Estilos para el caption */
 .carousel-caption {
-  position: absolute; /* Posiciona el caption sobre la imagen */
-  bottom: 0; /* Alinea en la parte inferior */
+  position: absolute;
+  bottom: 0;
   left: 0;
   right: 0;
-  background-color: rgba(0, 0, 0, 0.6); /* Fondo semi-transparente oscuro */
-  color: white; /* Texto blanco */
-  padding: 15px; /* Espacio interno */
-  text-align: center; /* Centra el texto */
-  font-size: 1rem; /* Tamaño de fuente */
-  /* Opcional: Ocultar por defecto y mostrar al pasar el ratón */
-  /* opacity: 0; */
-  /* transition: opacity 0.3s ease; */
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 15px;
+  text-align: center;
+  font-size: 1rem;
 }
-
-/* Opcional: Mostrar caption solo al pasar el ratón */
-/*
-.carousel__slide:hover .carousel-caption {
-    opacity: 1;
-}
-*/
 
 .carousel-caption p {
-    margin: 0; /* Elimina el margen por defecto del párrafo */
+    margin: 0;
 }
 
-
-/* Estilos para indicadores */
 .loading-indicator,
 .error-message,
 .no-images-message {
@@ -183,13 +187,4 @@ export default {
 .no-images-message {
     color: #6c757d;
 }
-
-/* Estilos para los botones de navegación y paginación si quieres personalizarlos */
-/*
-.carousel__prev,
-.carousel__next {
-  box-sizing: content-box;
-  border: 5px solid white;
-}
-*/
 </style>
