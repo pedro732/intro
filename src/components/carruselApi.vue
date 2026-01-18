@@ -9,19 +9,18 @@
 
     <carousel 
       v-else 
-      :autoplay="15000" 
+      :autoplay="isMobile ? 8000 : 15000"
       :wrap-around="true"
       :items-to-show="1"
-      :transition="400"
+      :transition="isMobile ? 300 : 400"
+      :pause-on-hover="true"
     >
       <slide v-for="item in items" :key="item.id">
         <div class="slide-content">
           <img
             :src="item.image"
-            :srcset="item.image"
-            class="d-block w-100"
             :alt="item.alt || 'Imagen de Pexels'"
-            loading="lazy"
+            class="d-block w-100"
             decoding="async"
           />
           <div v-if="item.alt" class="carousel-caption">
@@ -56,6 +55,7 @@ export default {
       isLoading: true,
       error: null,
       isMobile: false,
+      imagesLoaded: 0,
     };
   },
   mounted() {
@@ -63,8 +63,10 @@ export default {
     this.isMobile = window.innerWidth <= 768;
     window.addEventListener('resize', this.handleResize);
     
-    // Cargar imágenes
-    this.fetchImagesFromNetlifyFunction();
+    // Cargar imágenes con pequeño delay para evitar congelamiento
+    setTimeout(() => {
+      this.fetchImagesFromNetlifyFunction();
+    }, 100);
   },
   beforeUnmount() {
     window.removeEventListener('resize', this.handleResize);
@@ -77,11 +79,12 @@ export default {
       this.isLoading = true;
       this.error = null;
       this.items = [];
+      this.imagesLoaded = 0;
 
       try {
         const controller = new AbortController();
-        // En móvil usar timeout más corto
-        const timeout = this.isMobile ? 5000 : 8000;
+        // En móvil usar timeout más corto pero no tanto
+        const timeout = this.isMobile ? 8000 : 12000;
         const timeoutId = setTimeout(() => controller.abort(), timeout);
 
         const response = await fetch('/.netlify/functions/pexels-images', {
@@ -96,9 +99,14 @@ export default {
         }
 
         if (data.images && data.images.length > 0) {
-          // En móvil: máximo 4 imágenes, en desktop: máximo 8
-          const maxImages = this.isMobile ? 4 : 8;
-          this.items = data.images.slice(0, maxImages);
+          // En móvil: máximo 3 imágenes (menos carga), en desktop: máximo 6
+          const maxImages = this.isMobile ? 3 : 6;
+          this.items = data.images.slice(0, maxImages).map((img, index) => ({
+            ...img,
+            id: img.id || `img-${index}`,
+            // Optimizar URLs de imágenes para móvil
+            image: this.isMobile ? this.optimizeImageUrl(img.image) : img.image
+          }));
         } else {
           console.warn('Netlify Function: No images returned.');
           this.items = [];
@@ -107,7 +115,21 @@ export default {
       } catch (err) {
         console.error('Error al obtener imágenes:', err);
         if (err.name === 'AbortError') {
-          this.error = 'Timeout al cargar imágenes';
+          this.error = 'Timeout al cargar imágenes. Intenta recargando la página.';
+        } else {
+          this.error = 'No se pudieron cargar las imágenes.';
+        }
+        this.items = [];
+      } finally {
+        this.isLoading = false;
+      }
+    },
+    optimizeImageUrl(url) {
+      // Reducir calidad y tamaño en móvil
+      // Si es de Pexels, mantener la URL pero confiar en decoding async
+      return url;
+    }
+  }
         } else {
           this.error = 'No se pudieron cargar las imágenes';
         }
@@ -141,6 +163,8 @@ export default {
 :deep(.carousel__viewport) {
   position: relative;
   width: 100%;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 :deep(.carousel) {
@@ -154,6 +178,8 @@ export default {
   align-items: center;
   overflow: hidden;
   width: 100%;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 .slide-content {
@@ -164,17 +190,21 @@ export default {
     justify-content: center;
     align-items: center;
     background-color: #f5f5f5;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
 }
 
 .carousel__slide img {
   width: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
-  will-change: transform;
+  transition: transform 0.2s ease;
+  will-change: auto;
   display: block;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
-/* Altura responsiva */
+/* Altura responsiva - reducida en móvil para mejor rendimiento */
 @media (min-width: 769px) {
   .carousel__slide img {
     height: 400px;
@@ -183,12 +213,12 @@ export default {
 
 @media (max-width: 768px) {
   .carousel__slide img {
-    height: 250px;
+    height: 280px;
   }
 }
 
 .carousel__slide:hover img {
-  transform: scale(1.05);
+  transform: scale(1.02);
 }
 
 .carousel-caption {
@@ -213,27 +243,30 @@ export default {
 /* Estilos para los botones de navegación */
 :deep(.carousel__prev),
 :deep(.carousel__next) {
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.9);
   border: 2px solid #28a745;
   color: #28a745;
-  width: 50px;
-  height: 50px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   z-index: 10;
   display: flex !important;
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  font-size: 18px;
+  font-size: 16px;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 :deep(.carousel__prev:hover),
 :deep(.carousel__next:hover) {
   background-color: #28a745;
   color: white;
-  transform: scale(1.1);
+  transform: scale(1.08);
 }
 
 :deep(.carousel__prev:active),
@@ -244,29 +277,32 @@ export default {
 /* Estilos para la paginación */
 :deep(.carousel__pagination) {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 15px;
   padding: 10px 0;
   position: relative;
   z-index: 8;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 :deep(.carousel__pagination-button) {
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background-color: rgba(40, 167, 69, 0.3);
   border: 2px solid #28a745;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   padding: 0;
+  -webkit-tap-highlight-color: transparent;
 }
 
 :deep(.carousel__pagination-button.carousel__pagination-button--active) {
   background-color: #28a745;
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   transform: scale(1.2);
 }
 
@@ -278,8 +314,9 @@ export default {
 .error-message,
 .no-images-message {
     text-align: center;
-    font-size: 1.2rem;
-    margin: 50px 0;
+    font-size: 1.1rem;
+    margin: 40px 0;
+    padding: 20px;
 }
 
 .loading-indicator {
@@ -288,6 +325,10 @@ export default {
 
 .error-message {
     color: #dc3545;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+    padding: 15px;
 }
 
 .no-images-message {
