@@ -16,9 +16,9 @@ exports.handler = async function(event, context) {
     // Crea el cliente de Pexels
     const client = createClient(apiKey);
 
-    // Define los parámetros de búsqueda - OPTIMIZADO PARA MÓVIL
-    const query = 'nature'; // Una sola palabra = respuesta más rápida desde Pexels
-    const perPage = 4; // REDUCIDO: 30 → 4 (4 imágenes es suficiente para todos los dispositivos)
+    // Define los parámetros de búsqueda - MÁXIMO OPTIMIZADO
+    const query = 'nature'; // Búsqueda simple
+    const perPage = 3; // Reducido: 4 → 3 imágenes solamente
     const page = 1;
 
     let photos;

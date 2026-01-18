@@ -40,7 +40,7 @@
       <CarruselApi />
       <VistaTarjeta/>
       <inteligencia-artificial/>
-      <IndicadoresEconomicos/>
+      <!-- Indicadores Económicos removido por ser lento -->
       <FotoDelDia/>
       <NoticiaDelDia/>
       <PieDePagina/>
@@ -61,7 +61,7 @@ import EsquemaMetodo from '../components/EsquemaMetodo.vue'
 // Importar todos los componentes normalmente
 import CarruselApi from '../components/carruselApi.vue'
 import InteligenciaArtificial from '@/components/InteligenciaArtificial.vue'
-import IndicadoresEconomicos from '../components/indicadores.vue'
+// import IndicadoresEconomicos from '../components/indicadores.vue' // REMOVIDO
 import FotoDelDia from '../components/FotodelDia.vue'
 import NoticiaDelDia from '../components/NoticiaDelDia.vue'
 
@@ -71,7 +71,7 @@ export default {
     BarraNavegacion,
     CarruselApi,
     VistaTarjeta,
-    IndicadoresEconomicos,
+    // IndicadoresEconomicos, // REMOVIDO
     FotoDelDia,
     NoticiaDelDia,
     PieDePagina,

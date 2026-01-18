@@ -3,16 +3,26 @@
   <div class="carrusel-api-container">
     <h2>Imágenes de Pexels</h2>
 
-    <div v-if="isLoading" class="loading-indicator">Cargando imágenes...</div>
-    <div v-else-if="error" class="error-message">Error al cargar imágenes: {{ error }}</div>
-    <div v-else-if="items.length === 0" class="no-images-message">No se encontraron imágenes para mostrar.</div>
+    <!-- Mostrar spinner mientras carga -->
+    <div v-if="isLoading && items.length === 0" class="carousel-loading">
+      <div class="spinner-border text-success" role="status">
+        <span class="visually-hidden">Cargando imágenes...</span>
+      </div>
+      <p class="mt-2">Cargando galería de imágenes...</p>
+    </div>
 
+    <!-- Mostrar error si no se puede cargar -->
+    <div v-else-if="error && items.length === 0" class="error-message">
+      Error al cargar imágenes: {{ error }}
+    </div>
+
+    <!-- Mostrar carrusel si hay imágenes -->
     <carousel 
-      v-if="items.length > 0"
-      :autoplay="isMobile ? 6000 : 12000"
+      v-else-if="items.length > 0"
+      :autoplay="isMobile ? 5000 : 10000"
       :wrap-around="true"
       :items-to-show="1"
-      :transition="isMobile ? 300 : 400"
+      :transition="200"
       :pause-on-hover="true"
     >
       <slide v-for="item in items" :key="item.id">
@@ -21,9 +31,8 @@
             :src="item.image"
             :alt="item.alt || 'Imagen científica'"
             class="d-block w-100"
+            loading="lazy"
             decoding="async"
-            @load="onImageLoad"
-            @error="onImageError"
           />
           <div v-if="item.alt" class="carousel-caption">
             <p>{{ item.alt }}</p>
@@ -36,14 +45,6 @@
         <pagination />
       </template>
     </carousel>
-    
-    <!-- Mostrar spinner mientras carga -->
-    <div v-else-if="isLoading" class="carousel-loading">
-      <div class="spinner-border text-success" role="status">
-        <span class="visually-hidden">Cargando imágenes...</span>
-      </div>
-      <p class="mt-2">Cargando galería de imágenes...</p>
-    </div>
   </div>
 </template>
 
@@ -73,7 +74,7 @@ export default {
     this.isMobile = window.innerWidth <= 768;
     window.addEventListener('resize', this.handleResize);
     
-    // Cargar imágenes INMEDIATAMENTE (sin delay)
+    // Cargar imágenes INMEDIATAMENTE
     this.fetchImagesFromNetlifyFunction();
   },
   beforeUnmount() {
@@ -87,12 +88,11 @@ export default {
       this.isLoading = true;
       this.error = null;
       this.items = [];
-      this.imagesLoaded = 0;
 
       try {
+        // Timeout muy corto - 5 segundos máximo
         const controller = new AbortController();
-        // Timeout más corto para respuesta rápida
-        const timeout = 6000; // 6 segundos máximo
+        const timeout = 5000;
         const timeoutId = setTimeout(() => controller.abort(), timeout);
 
         const response = await fetch('/.netlify/functions/pexels-images', {
@@ -108,26 +108,28 @@ export default {
         const data = await response.json();
 
         if (data.images && data.images.length > 0) {
-          // Mostrar imágenes inmediatamente (no esperar a que carguen todas)
+          // Mostrar imágenes inmediatamente
           this.items = data.images;
-          this.isLoading = false; // IMPORTANTE: terminar carga aquí
         } else {
           this.items = [];
-          this.isLoading = false;
+          this.error = 'No se encontraron imágenes';
         }
 
       } catch (err) {
         console.error('Error al obtener imágenes:', err);
-        this.error = 'Las imágenes están tardando demasiado. Intenta recargando.';
+        this.error = err.name === 'AbortError' 
+          ? 'La carga de imágenes tardó demasiado. Intenta recargando.' 
+          : 'Error al cargar las imágenes';
         this.items = [];
+      } finally {
         this.isLoading = false;
       }
     },
     onImageLoad() {
-      this.imagesLoaded++;
+      // No necesario por ahora
     },
     onImageError(e) {
-      console.error('Error al cargar imagen:', e);
+      // No necesario por ahora
     }
   }
 }
