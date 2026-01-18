@@ -11,6 +11,7 @@
           <img
             src="/assets/metodo_cientifico.jpg"
             alt="Método Científico"
+            class="esquema-img"
           />
         </main>
 
@@ -85,9 +86,10 @@ export default {
   padding: 1rem;
 }
 
-.sheet-body img {
+.sheet-body .esquema-img {
   width: 100%;
-  height: auto;
+  height: 100%; /* Ocupa toda la altura disponible en el body */
+  object-fit: contain; /* Asegura que la imagen se ajuste sin recortarse */
 }
 
 /* FOOTER */
@@ -125,7 +127,7 @@ export default {
 
   .sheet {
     max-width: 800px;
-    max-height: 90vh;
+    max-height: 95vh; /* Aumentar un poco la altura máxima para desktop */
     background: white;
     border-radius: 16px;
     overflow: hidden;
