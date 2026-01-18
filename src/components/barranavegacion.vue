@@ -79,7 +79,7 @@ export default {
           if (navbarCollapse.classList.contains('show')) {
             // Usar Bootstrap's collapse API si está disponible
             if (window.bootstrap && window.bootstrap.Collapse) {
-              const collapse = new window.bootstrap.Collapse(navbarCollapse, {
+              new window.bootstrap.Collapse(navbarCollapse, {
                 toggle: true
               });
             } else {
