@@ -1,5 +1,3 @@
-const { OpenRouter } = require('@openrouter/sdk');
-
 exports.handler = async function(event, context) {
   console.log('📨 Solicitud recibida:', { method: event.httpMethod, path: event.path });
   
@@ -26,14 +24,6 @@ exports.handler = async function(event, context) {
 
     console.log('✅ API Key encontrada');
 
-    const openRouter = new OpenRouter({
-      apiKey: apiKey,
-      defaultHeaders: {
-        'HTTP-Referer': process.env.SITE_URL || 'https://intro.netlify.app',
-        'X-Title': 'Intro - Plataforma de Educación Científica',
-      },
-    });
-
     // Parsea el cuerpo de la solicitud
     let parsedBody;
     try {
@@ -59,34 +49,57 @@ exports.handler = async function(event, context) {
     console.log('📝 Mensaje:', message.substring(0, 50) + '...');
     console.log('🤖 Modelo:', model);
 
-    // Llama a la API de OpenRouter
-    const completion = await openRouter.chat.completions.create({
-      model: model,
-      messages: [
-        {
-          role: 'user',
-          content: message,
-        },
-      ],
-      stream: false,
-      max_tokens: 2048,
+    // Llamada directa a la API de OpenRouter
+    const openrouterResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'HTTP-Referer': process.env.SITE_URL || 'https://intro.netlify.app',
+        'X-Title': 'Intro - Plataforma de Educación Científica',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: model,
+        messages: [
+          {
+            role: 'user',
+            content: message,
+          },
+        ],
+        stream: false,
+        max_tokens: 2048,
+      }),
     });
 
-    console.log('✅ Respuesta recibida de OpenRouter');
+    console.log('📥 Respuesta de OpenRouter con status:', openrouterResponse.status);
+
+    const responseData = await openrouterResponse.json();
+
+    if (!openrouterResponse.ok) {
+      console.error('❌ Error de OpenRouter:', responseData);
+      return {
+        statusCode: openrouterResponse.status,
+        body: JSON.stringify({ 
+          message: 'Error from OpenRouter API',
+          error: responseData.error || responseData
+        }),
+      };
+    }
 
     // Devuelve la respuesta
-    if (completion.choices && completion.choices[0]?.message?.content) {
+    if (responseData.choices && responseData.choices[0]?.message?.content) {
+      console.log('✅ Respuesta exitosa de OpenRouter');
       return {
         statusCode: 200,
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          response: completion.choices[0].message.content,
+          response: responseData.choices[0].message.content,
         }),
       };
     } else {
-      console.error('❌ Error: Respuesta inválida de OpenRouter', completion);
+      console.error('❌ Error: Respuesta inválida de OpenRouter', responseData);
       return {
         statusCode: 500,
         body: JSON.stringify({ message: 'Invalid response from OpenRouter API.' }),
@@ -100,8 +113,7 @@ exports.handler = async function(event, context) {
       statusCode: 500,
       body: JSON.stringify({ 
         message: 'Error processing your request.', 
-        error: error.message,
-        details: error.response?.data || error.toString()
+        error: error.message
       }),
     };
   }
