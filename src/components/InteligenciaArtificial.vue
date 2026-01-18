@@ -79,6 +79,7 @@ export default {
         const timeoutMs = this.isMobile ? 15000 : 25000;
         const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
+        console.log('📤 Enviando mensaje a OpenRouter...');
         const response = await fetch('/.netlify/functions/openrouter-chat', {
           method: 'POST',
           headers: {
@@ -92,12 +93,16 @@ export default {
         });
 
         clearTimeout(timeoutId);
+        
+        console.log('📥 Respuesta recibida con status:', response.status);
         const data = await response.json();
 
         if (!response.ok) {
-          throw new Error(data.message || 'Error al comunicarse con la función.');
+          console.error('❌ Error en la respuesta:', data);
+          throw new Error(data.message || data.error || 'Error al comunicarse con la función.');
         }
 
+        console.log('✅ Respuesta exitosa');
         this.iaResponse = data.response;
       } catch (err) {
         console.error('Fetch error:', err);
