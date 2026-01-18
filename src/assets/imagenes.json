@@ -1,53 +1,53 @@
 {
   "images": [
     {
-      "id": 1,
-      "image": "https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=600&h=400&fit=crop",
+      "id": "img-1",
+      "image": "https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=800&h=500&fit=crop",
       "alt": "Naturaleza selvática con vegetación exuberante"
     },
     {
-      "id": 2,
-      "image": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&h=400&fit=crop",
+      "id": "img-2",
+      "image": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=500&fit=crop",
       "alt": "Montañas nevadas con cielo azul"
     },
     {
-      "id": 3,
-      "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop",
+      "id": "img-3",
+      "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=500&fit=crop",
       "alt": "Cascada natural en bosque tropical"
     },
     {
-      "id": 4,
-      "image": "https://images.unsplash.com/photo-1469022563149-aa64dbd37dae?w=600&h=400&fit=crop",
+      "id": "img-4",
+      "image": "https://images.unsplash.com/photo-1469022563149-aa64dbd37dae?w=800&h=500&fit=crop",
       "alt": "Bosque denso y frondoso"
     },
     {
-      "id": 5,
-      "image": "https://images.unsplash.com/photo-1511379938547-c1f69b13d835?w=600&h=400&fit=crop",
+      "id": "img-5",
+      "image": "https://images.unsplash.com/photo-1511379938547-c1f69b13d835?w=800&h=500&fit=crop",
       "alt": "Paisaje montañoso al atardecer"
     },
     {
-      "id": 6,
-      "image": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&h=400&fit=crop",
+      "id": "img-6",
+      "image": "https://images.unsplash.com/photo-1494840442893-86f3b37db724?w=800&h=500&fit=crop",
       "alt": "Fauna silvestre en su hábitat natural"
     },
     {
-      "id": 7,
-      "image": "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=600&h=400&fit=crop",
+      "id": "img-7",
+      "image": "https://images.unsplash.com/photo-1444080748397-f442aa95c3e5?w=800&h=500&fit=crop",
       "alt": "Cielo estrellado nocturno"
     },
     {
-      "id": 8,
-      "image": "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=600&h=400&fit=crop",
+      "id": "img-8",
+      "image": "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800&h=500&fit=crop",
       "alt": "Agua cristalina en laguna alpina"
     },
     {
-      "id": 9,
-      "image": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&h=400&fit=crop",
+      "id": "img-9",
+      "image": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=500&fit=crop",
       "alt": "Flora selvática y biodiversidad"
     },
     {
-      "id": 10,
-      "image": "https://images.unsplash.com/photo-1465056836556-6812c9d1c72e?w=600&h=400&fit=crop",
+      "id": "img-10",
+      "image": "https://images.unsplash.com/photo-1465056836556-6812c9d1c72e?w=800&h=500&fit=crop",
       "alt": "Ecosistema forestal preservado"
     }
   ]

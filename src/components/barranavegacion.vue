@@ -69,13 +69,27 @@ export default {
   name: 'BarraNavegacion',
   methods: {
     closeMenu() {
-      // Cerrar el menú después de hacer click
-      const navbarCollapse = document.getElementById('navbarNav');
-      if (navbarCollapse && navbarCollapse.classList.contains('show')) {
+      // Cerrar el menú después de hacer click - método más robusto
+      try {
+        const navbarCollapse = document.getElementById('navbarNav');
         const toggleBtn = document.querySelector('.navbar-toggler');
-        if (toggleBtn) {
-          toggleBtn.click();
+        
+        if (navbarCollapse && toggleBtn) {
+          // Si el menú está visible, cerrarlo
+          if (navbarCollapse.classList.contains('show')) {
+            // Usar Bootstrap's collapse API si está disponible
+            if (window.bootstrap && window.bootstrap.Collapse) {
+              const collapse = new window.bootstrap.Collapse(navbarCollapse, {
+                toggle: true
+              });
+            } else {
+              // Fallback: click al botón
+              toggleBtn.click();
+            }
+          }
         }
+      } catch (error) {
+        console.log('Error closing menu:', error);
       }
     }
   }

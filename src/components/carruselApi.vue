@@ -77,6 +77,7 @@ export default {
     loadLocalImages() {
       // Cargar imágenes del JSON - instantáneo, sin API
       this.items = imagenes.images;
+      console.log('Carrusel cargado con', this.items.length, 'imágenes:', this.items);
     }
   }
 }
