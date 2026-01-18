@@ -4,14 +4,16 @@
     <h2>Imágenes Científicas</h2>
 
     <!-- Carrusel con imágenes locales -->
-    <carousel 
-      v-if="items.length > 0"
-      :autoplay="isMobile ? 4000 : 8000"
-      :wrap-around="true"
-      :items-to-show="1"
-      :transition="200"
-      :pause-on-hover="true"
-    >
+    <carousel
+  v-if="items.length > 0"
+  :key="carouselKey"
+  :autoplay="isMobile ? 4000 : 8000"
+  :wrap-around="true"
+  :items-to-show="1"
+  :transition="200"
+  :pause-on-hover="true"
+>
+
       <slide v-for="item in items" :key="item.id">
         <div class="slide-content">
           <img
@@ -54,11 +56,12 @@ export default {
     Navigation
   },
   data() {
-    return {
-      items: [],
-      isMobile: false
-    };
-  },
+  return {
+    items: [],
+    isMobile: false,
+    carouselKey: 0
+  }
+},
   mounted() {
     // Detectar si es móvil
     this.isMobile = window.innerWidth <= 768;
@@ -70,24 +73,17 @@ export default {
   beforeUnmount() {
     window.removeEventListener('resize', this.handleResize);
   },
-  methods: {
-    handleResize() {
-      this.isMobile = window.innerWidth <= 768;
-    },
-    loadLocalImages() {
-      // Cargar imágenes del JSON - forzar reactividad usando spread operator
-      // Esto asegura que Vue detecte el cambio incluso en Mac/Chrome
-      const imagenesArray = imagenes.images || [];
-      // Forzar reactivamente asignando un nuevo array
-      this.items = [...imagenesArray];
-      
-      console.log('Carrusel cargado con', this.items.length, 'imágenes:', this.items);
-      
-      // Forzar re-render si es necesario
-      this.$forceUpdate();
-    }
+ methods: {
+  loadLocalImages() {
+    const imagenesArray = imagenes.images || [];
+    this.items = [...imagenesArray];
+
+    // 🔥 forzar re-render REAL
+    this.$nextTick(() => {
+      this.carouselKey++;
+    });
   }
-}
+}}
 </script>
 
 <style scoped>

@@ -50,27 +50,29 @@ export default {
 
 
 <style scoped>
+/* OVERLAY */
 .sheet-wrapper {
   position: fixed;
   inset: 0;
   background: white;
   z-index: 10000;
-
-  /* 👇 SCROLL NATIVO */
-  overflow-y: auto;
+  overflow: hidden;
 }
 
-/* CONTENIDO */
+/* CONTENEDOR PRINCIPAL */
 .sheet {
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
+  background: white;
 }
 
 /* HEADER */
 .sheet-header {
+  flex-shrink: 0;
   position: sticky;
   top: 0;
+  z-index: 2;
   background: white;
   padding: 1rem;
   border-bottom: 1px solid #ddd;
@@ -80,24 +82,33 @@ export default {
   align-items: center;
 }
 
-/* BODY */
+/* BODY CON SCROLL */
 .sheet-body {
   flex: 1;
+  overflow-y: auto;
   padding: 1rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+/* IMAGEN RESPONSIVA */
 .sheet-body .esquema-img {
-  width: 100%;
-  height: 100%; /* Ocupa toda la altura disponible en el body */
-  object-fit: contain; /* Asegura que la imagen se ajuste sin recortarse */
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 }
 
 /* FOOTER */
 .sheet-footer {
+  flex-shrink: 0;
   padding: 1rem;
   border-top: 1px solid #ddd;
+  background: white;
 }
 
+/* BOTÓN */
 .btn {
   width: 100%;
   padding: 1rem;
@@ -113,22 +124,22 @@ export default {
   background: none;
   border: none;
   font-size: 1.5rem;
+  cursor: pointer;
 }
 
-/* DESKTOP: SE VE COMO MODAL */
+/* DESKTOP */
 @media (min-width: 768px) {
   .sheet-wrapper {
     background: rgba(0, 0, 0, 0.7);
-
     display: flex;
     justify-content: center;
     align-items: center;
   }
 
   .sheet {
-    max-width: 800px;
-    max-height: 95vh; /* Aumentar un poco la altura máxima para desktop */
-    background: white;
+    width: 90%;
+    max-width: 900px;
+    max-height: 90vh;
     border-radius: 16px;
     overflow: hidden;
   }

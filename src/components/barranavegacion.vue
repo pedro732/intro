@@ -69,46 +69,41 @@ export default {
   name: 'BarraNavegacion',
   methods: {
     closeMenu(event) {
-      // Prevenir propagación del evento para evitar interferencias
-      if (event) {
-        event.stopPropagation();
+      const navbarCollapse = document.getElementById('navbarNav');
+      // Obtener la instancia de Collapse de Bootstrap
+      const bsCollapse = new window.bootstrap.Collapse(navbarCollapse, {
+        toggle: false
+      });
+      
+      // Si el menú está abierto, cerrarlo
+      if (navbarCollapse && navbarCollapse.classList.contains('show')) {
+        bsCollapse.hide();
+        // Asegurarse de que el botón de alternancia también refleje el estado cerrado
+        const toggler = document.querySelector('.navbar-toggler');
+        if (toggler && !toggler.classList.contains('collapsed')) {
+          toggler.classList.add('collapsed');
+          toggler.setAttribute('aria-expanded', 'false');
+        }
       }
       
-      // Cerrar el menú después de hacer click - versión ultra-robusta
-      try {
-        const navbarCollapse = document.getElementById('navbarNav');
-        const toggleBtn = document.querySelector('.navbar-toggler');
-        
-        if (navbarCollapse && toggleBtn && navbarCollapse.classList.contains('show')) {
-          // MÉTODO 1: Remover clases directamente (más directo para mobile)
-          navbarCollapse.classList.remove('show');
-          toggleBtn.classList.add('collapsed');
-          toggleBtn.setAttribute('aria-expanded', 'false');
-          
-          // Forzar un pequeño delay para asegurar que el DOM se actualice
-          setTimeout(() => {
-            // MÉTODO 2: Usar Bootstrap API como respaldo si aún está abierto
-            if (window.bootstrap && window.bootstrap.Collapse && navbarCollapse.classList.contains('show')) {
-              try {
-                const collapse = new window.bootstrap.Collapse(navbarCollapse, {
-                  toggle: false
-                });
-                collapse.hide();
-              } catch (e) {
-                console.log('Bootstrap API fallback failed');
-              }
-            }
-            
-            // MÉTODO 3: Click directo como último recurso
-            if (navbarCollapse.classList.contains('show')) {
-              toggleBtn.click();
-            }
-          }, 0);
-        }
-      } catch (error) {
-        console.log('Error closing menu:', error);
+      // Si el evento es de un enlace y tiene un href válido, navegar
+      if (event && event.target.tagName === 'A' && event.target.href && event.target.href !== '#') {
+        // Prevenir la navegación por defecto del enlace para manejarla manualmente
+        event.preventDefault();
+        // Pequeño retraso para que la animación de cierre del menú sea visible
+        setTimeout(() => {
+          window.location.href = event.target.href;
+        }, 150); 
       }
     }
+  },
+  mounted() {
+    if (!window.bootstrap || !window.bootstrap.Collapse) {
+      console.warn("Bootstrap Collapse JS no está disponible. El menú podría no funcionar correctamente en dispositivos móviles.");
+    }
+    // Bootstrap 5 requiere que el JS esté cargado para que el componente Collapse funcione.
+    // Si se usa un CDN, asegurarse de que el script de Bootstrap JS esté antes del script de la aplicación Vue.
+    // Si se instala vía npm, asegurarse de importarlo correctamente en el punto de entrada de la aplicación (main.js o similar).
   }
 }
 </script>

@@ -37,7 +37,7 @@
     <!-- Página principal -->
     <div v-show="!mostrarIntro && !mostrarEtapas && !mostrarEcosistemas && !mostrarEcosistemas2 && !mostrarEsquema">
       <BarraNavegacion />
-      <CarruselApi />
+      <CarruselManual/>
       <VistaTarjeta/>
       <inteligencia-artificial/>
       <!-- Indicadores Económicos removido por ser lento -->
@@ -59,17 +59,17 @@ import EcosistemasModal2 from '../components/EcosistemasModal2.vue'
 import EsquemaMetodo from '../components/EsquemaMetodo.vue'
 
 // Importar todos los componentes normalmente
-import CarruselApi from '../components/carruselApi.vue'
-import InteligenciaArtificial from '@/components/InteligenciaArtificial.vue'
+//import InteligenciaArtificial from '@/components/InteligenciaArtificial.vue'
 // import IndicadoresEconomicos from '../components/indicadores.vue' // REMOVIDO
 // import FotoDelDia from '../components/FotodelDia.vue' // REMOVIDO - demora mucho en iPhone
 import NoticiaDelDia from '../components/NoticiaDelDia.vue'
+import InteligenciaArtificial from '@/components/InteligenciaArtificial.vue'
+import  CarruselManual from '@/components/CarruselManual.vue'
 
 export default {
   name: 'CienciaIntro',
   components: {
     BarraNavegacion,
-    CarruselApi,
     VistaTarjeta,
     // IndicadoresEconomicos, // REMOVIDO
     // FotoDelDia, // REMOVIDO - demora mucho en iPhone
@@ -80,7 +80,8 @@ export default {
     EtapasMetodoCientifico,
     EcosistemasModal,
     EcosistemasModal2,
-    EsquemaMetodo
+    EsquemaMetodo,
+    CarruselManual
   },
   data() {
     return {

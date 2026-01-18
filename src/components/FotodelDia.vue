@@ -1,6 +1,6 @@
 <template>
     <div class="foto-del-dia-container">
-      <h3>Foto del Día</h3>
+ <h3 v-if="!isMobile">Foto del Día</h3>
       <img 
         v-if="photo" 
         :src="photo.urls.small" 
@@ -11,7 +11,7 @@
         @click="openModal"
         :style="{ cursor: isMobile ? 'default' : 'pointer' }"
       >
-      <div v-else class="placeholder">
+      <div v-else-if="!isMobile" class="placeholder">
         <p>Esperando foto del día...</p>
       </div>
 
@@ -45,7 +45,9 @@
     mounted() {
       this.isMobile = window.innerWidth <= 768;
       window.addEventListener('resize', this.handleResize);
-      this.loadPhoto();
+ if (!this.isMobile) {
+ this.loadPhoto();
+      }
     },
     beforeUnmount() {
       window.removeEventListener('resize', this.handleResize);
