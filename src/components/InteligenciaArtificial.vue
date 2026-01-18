@@ -37,6 +37,7 @@ export default {
       error: null,
       isLoading: false,
       isMobile: false,
+      model: 'openai/gpt-3.5-turbo',
     };
   },
   mounted() {
@@ -74,16 +75,19 @@ export default {
 
       try {
         const controller = new AbortController();
-        // Timeout muy agresivo para evitar bloqueos
-        const timeoutMs = this.isMobile ? 5000 : 10000;
+        // Timeout para evitar bloqueos
+        const timeoutMs = this.isMobile ? 15000 : 25000;
         const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
-        const response = await fetch('/.netlify/functions/mistral-chat', {
+        const response = await fetch('/.netlify/functions/openrouter-chat', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ message: this.userMessage }),
+          body: JSON.stringify({ 
+            message: this.userMessage,
+            model: this.model,
+          }),
           signal: controller.signal
         });
 

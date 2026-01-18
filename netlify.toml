@@ -4,6 +4,8 @@
 
 [build.environment]
   NODE_VERSION = "22"
+  SITE_URL = "https://quark-charm.cl"
+  OPENROUTER_API_KEY = "sk-or-v1-1ab...8ee"
 
 [[redirects]]
   from = "/*"
