@@ -1,7 +1,7 @@
 # File: src/components/carruselApi.vue
 <template>
   <div class="carrusel-api-container">
-    <h2>Filósofos de la Ciencia</h2>
+    <h2>Imágenes Científicas</h2>
 
     <!-- Carrusel con imágenes locales -->
     <carousel 
@@ -43,7 +43,7 @@
 <script>
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel';
 import 'vue3-carousel/dist/carousel.css';
-import filosofos from '@/assets/filosofos.json';
+import imagenes from '@/assets/imagenes.json';
 
 export default {
   name: 'VistaCarruselApi',
@@ -75,13 +75,9 @@ export default {
       this.isMobile = window.innerWidth <= 768;
     },
     loadLocalImages() {
-      // Cargar filósofos del JSON - instantáneo, sin API
-      this.items = filosofos.map((filosofo, index) => ({
-        id: 'filosofo-' + index,
-        image: filosofo.imagen,
-        alt: filosofo.nombre + ' - ' + filosofo.contribucion
-      }));
-      console.log('Carrusel cargado con', this.items.length, 'filósofos:', this.items);
+      // Cargar imágenes del JSON - instantáneo, sin API
+      this.items = imagenes.images;
+      console.log('Carrusel cargado con', this.items.length, 'imágenes:', this.items);
     }
   }
 }
