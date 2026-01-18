@@ -7,7 +7,13 @@
     <div v-else-if="error" class="error-message">Error al cargar imágenes: {{ error }}</div>
     <div v-else-if="items.length === 0" class="no-images-message">No se encontraron imágenes para mostrar.</div>
 
-    <carousel v-else :autoplay="15000" :wrap-around="true">
+    <carousel 
+      v-else 
+      :autoplay="15000" 
+      :wrap-around="true"
+      :items-to-show="1"
+      :transition="400"
+    >
       <slide v-for="item in items" :key="item.id">
         <div class="slide-content">
           <img
@@ -122,8 +128,8 @@ export default {
     background-color: #e9f7ef;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    overflow: hidden;
-    will-change: transform;
+    overflow: visible;
+    position: relative;
 }
 
 .carrusel-api-container h2 {
@@ -132,13 +138,22 @@ export default {
     margin-bottom: 20px;
 }
 
+:deep(.carousel__viewport) {
+  position: relative;
+  width: 100%;
+}
+
+:deep(.carousel) {
+  position: relative;
+}
+
 .carousel__slide {
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  contain: layout style paint;
+  width: 100%;
 }
 
 .slide-content {
@@ -148,6 +163,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: #f5f5f5;
 }
 
 .carousel__slide img {
@@ -155,6 +171,7 @@ export default {
   object-fit: cover;
   transition: transform 0.3s ease;
   will-change: transform;
+  display: block;
 }
 
 /* Altura responsiva */
@@ -184,10 +201,77 @@ export default {
   padding: 15px;
   text-align: center;
   font-size: 1rem;
+  z-index: 5;
 }
 
 .carousel-caption p {
     margin: 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Estilos para los botones de navegación */
+:deep(.carousel__prev),
+:deep(.carousel__next) {
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 2px solid #28a745;
+  color: #28a745;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+:deep(.carousel__prev:hover),
+:deep(.carousel__next:hover) {
+  background-color: #28a745;
+  color: white;
+  transform: scale(1.1);
+}
+
+:deep(.carousel__prev:active),
+:deep(.carousel__next:active) {
+  transform: scale(0.95);
+}
+
+/* Estilos para la paginación */
+:deep(.carousel__pagination) {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+  padding: 10px 0;
+  position: relative;
+  z-index: 8;
+}
+
+:deep(.carousel__pagination-button) {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: rgba(40, 167, 69, 0.3);
+  border: 2px solid #28a745;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+:deep(.carousel__pagination-button.carousel__pagination-button--active) {
+  background-color: #28a745;
+  width: 16px;
+  height: 16px;
+  transform: scale(1.2);
+}
+
+:deep(.carousel__pagination-button:hover) {
+  background-color: rgba(40, 167, 69, 0.6);
 }
 
 .loading-indicator,
