@@ -69,23 +69,34 @@ export default {
   name: 'BarraNavegacion',
   methods: {
     closeMenu() {
-      // Cerrar el menú después de hacer click - versión mejorada para mobile
+      // Cerrar el menú después de hacer click - versión ultra-robusta para mobile/iPhone
       try {
         const navbarCollapse = document.getElementById('navbarNav');
         const toggleBtn = document.querySelector('.navbar-toggler');
         
-        if (navbarCollapse && toggleBtn && navbarCollapse.classList.contains('show')) {
-          // Método 1: Remover clase show directamente (más confiable en mobile)
-          navbarCollapse.classList.remove('show');
-          // Actualizar atributo aria-expanded
-          toggleBtn.setAttribute('aria-expanded', 'false');
-          
-          // Método 2: Usar Bootstrap API como fallback
-          if (window.bootstrap && window.bootstrap.Collapse) {
+        if (navbarCollapse && toggleBtn) {
+          // Verificar si el menú está abierto
+          if (navbarCollapse.classList.contains('show')) {
+            // MÉTODO 1: Remover clases y atributos (más directo)
+            navbarCollapse.classList.remove('show');
+            toggleBtn.classList.remove('collapsed');
+            toggleBtn.setAttribute('aria-expanded', 'false');
+            
+            // MÉTODO 2: Usar Bootstrap API como respaldo
             try {
-              new window.bootstrap.Collapse(navbarCollapse, { toggle: false });
+              if (window.bootstrap && window.bootstrap.Collapse) {
+                const collapse = new window.bootstrap.Collapse(navbarCollapse, {
+                  toggle: false
+                });
+                collapse.hide();
+              }
             } catch (e) {
-              // Silenciar error de Bootstrap
+              console.log('Bootstrap API unavailable, using fallback');
+            }
+            
+            // MÉTODO 3: Click directo como último recurso
+            if (navbarCollapse.classList.contains('show')) {
+              toggleBtn.click();
             }
           }
         }

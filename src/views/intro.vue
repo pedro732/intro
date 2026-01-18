@@ -41,8 +41,7 @@
       <VistaTarjeta/>
       <inteligencia-artificial/>
       <!-- Indicadores Económicos removido por ser lento -->
-      <!-- FotoDelDia comentado temporalmente para debugging del bloqueo en iPhone -->
-      <!-- <FotoDelDia/> -->
+      <FotoDelDia/>
       <NoticiaDelDia/>
       <PieDePagina/>
     </div>
@@ -63,7 +62,7 @@ import EsquemaMetodo from '../components/EsquemaMetodo.vue'
 import CarruselApi from '../components/carruselApi.vue'
 import InteligenciaArtificial from '@/components/InteligenciaArtificial.vue'
 // import IndicadoresEconomicos from '../components/indicadores.vue' // REMOVIDO
-// import FotoDelDia from '../components/FotodelDia.vue' // REMOVIDO
+import FotoDelDia from '../components/FotodelDia.vue'
 import NoticiaDelDia from '../components/NoticiaDelDia.vue'
 
 export default {
@@ -73,7 +72,7 @@ export default {
     CarruselApi,
     VistaTarjeta,
     // IndicadoresEconomicos, // REMOVIDO
-    // FotoDelDia, // REMOVIDO
+    FotoDelDia,
     NoticiaDelDia,
     PieDePagina,
     InteligenciaArtificial,

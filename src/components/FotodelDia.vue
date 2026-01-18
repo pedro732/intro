@@ -12,7 +12,7 @@
         :style="{ cursor: isMobile ? 'default' : 'pointer' }"
       >
       <div v-else class="placeholder">
-        Cargando foto...
+        <p>Esperando foto del día...</p>
       </div>
 
       <!-- Modal para versión desktop -->
@@ -66,7 +66,12 @@
       },
       async loadPhoto() {
         try {
-          const response = await axios.get('https://api.unsplash.com/photos/random', {
+          // Crear un timeout muy agresivo para evitar bloqueos
+          const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Timeout loading photo')), 1500)
+          );
+          
+          const photoPromise = axios.get('https://api.unsplash.com/photos/random', {
             headers: {
               Authorization: 'Client-ID tMyjKmNW96NFkFTI-4yBF6Uylnr8xeO461QeoK4FRr0',
             },
@@ -76,15 +81,21 @@
               content_filter: 'high',
               count: 1,
             },
-            timeout: 2000
+            timeout: 1500
           });
+          
+          // Race: el timeout gana si la foto tarda mucho
+          const response = await Promise.race([photoPromise, timeoutPromise]);
+          
           if (response.data && !Array.isArray(response.data)) {
             this.photo = response.data;
           } else if (response.data && response.data.length > 0) {
             this.photo = response.data[0];
           }
         } catch (error) {
+          // Silenciar el error y permitir que la página cargue
           console.warn('No se pudo cargar foto del día:', error.message);
+          // No establecer this.photo para mostrar un estado vacío
         }
       }
     }
