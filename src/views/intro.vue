@@ -63,7 +63,7 @@ import EsquemaMetodo from '../components/EsquemaMetodo.vue'
 import CarruselApi from '../components/carruselApi.vue'
 import InteligenciaArtificial from '@/components/InteligenciaArtificial.vue'
 // import IndicadoresEconomicos from '../components/indicadores.vue' // REMOVIDO
-import FotoDelDia from '../components/FotodelDia.vue'
+// import FotoDelDia from '../components/FotodelDia.vue' // REMOVIDO
 import NoticiaDelDia from '../components/NoticiaDelDia.vue'
 
 export default {
@@ -73,7 +73,7 @@ export default {
     CarruselApi,
     VistaTarjeta,
     // IndicadoresEconomicos, // REMOVIDO
-    FotoDelDia,
+    // FotoDelDia, // REMOVIDO
     NoticiaDelDia,
     PieDePagina,
     InteligenciaArtificial,
