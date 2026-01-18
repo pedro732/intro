@@ -130,15 +130,6 @@ export default {
       console.error('Error al cargar imagen:', e);
     }
   }
-        } else {
-          this.error = 'No se pudieron cargar las imágenes';
-        }
-        this.items = [];
-      } finally {
-        this.isLoading = false;
-      }
-    }
-  }
 }
 </script>
 
