@@ -82,32 +82,51 @@
           const indicatorsNames = ['uf', 'dolar', 'euro', 'utm'];
           const symbols = ['$', '$', '€', '$'];
           
-          // Usar timeout diferente según dispositivo
-          const timeout = this.isMobile ? 3000 : 5000;
+          // Crear promesas con timeout real usando Promise.race()
+          const timeout = this.isMobile ? 2000 : 3000; // Reducido a 2-3 segundos
           
-          const indicatorsData = await Promise.all(
-            indicatorsNames.map((name) =>
-              axios.get(`https://mindicador.cl/api/${name}`, { timeout })
-                .then((res) => res.data)
-                .catch((err) => {
-                  console.warn(`Error cargando ${name}:`, err.message);
-                  return null;
-                })
-            )
-          );
+          const requests = indicatorsNames.map((name, index) => {
+            const timeoutPromise = new Promise((_, reject) => 
+              setTimeout(() => reject(new Error('timeout')), timeout)
+            );
+            
+            const fetchPromise = axios.get(`https://mindicador.cl/api/${name}`, { 
+              timeout: timeout
+            }).then(res => ({
+              data: res.data,
+              index: index
+            }));
+            
+            return Promise.race([fetchPromise, timeoutPromise])
+              .catch((err) => {
+                console.warn(`Timeout/Error cargando ${name}:`, err.message);
+                return null;
+              });
+          });
           
-          this.indicators = indicatorsData
-            .map((data, index) => {
-              if (data && data.serie && data.serie.length > 0) {
-                return {
-                  nombre: data.nombre,
-                  valor: data.serie[0].valor,
-                  simbolo: symbols[index]
-                };
+          // No esperar a todas - mostrar conforme lleguen
+          const results = await Promise.allSettled(requests);
+          
+          this.indicators = results
+            .map((result, index) => {
+              if (result.status === 'fulfilled' && result.value) {
+                const { data } = result.value;
+                if (data && data.serie && data.serie.length > 0) {
+                  return {
+                    nombre: data.nombre,
+                    valor: data.serie[0].valor,
+                    simbolo: symbols[index]
+                  };
+                }
               }
               return null;
             })
             .filter(item => item !== null);
+          
+          // Si no hay datos, mostrar algo para el usuario
+          if (this.indicators.length === 0) {
+            console.warn('No indicators loaded, retrying...');
+          }
         } catch (error) {
           console.error('Error al cargar indicadores:', error);
         }

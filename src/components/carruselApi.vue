@@ -8,8 +8,8 @@
     <div v-else-if="items.length === 0" class="no-images-message">No se encontraron imágenes para mostrar.</div>
 
     <carousel 
-      v-else 
-      :autoplay="isMobile ? 8000 : 15000"
+      v-if="items.length > 0"
+      :autoplay="isMobile ? 6000 : 12000"
       :wrap-around="true"
       :items-to-show="1"
       :transition="isMobile ? 300 : 400"
@@ -19,9 +19,11 @@
         <div class="slide-content">
           <img
             :src="item.image"
-            :alt="item.alt || 'Imagen de Pexels'"
+            :alt="item.alt || 'Imagen científica'"
             class="d-block w-100"
             decoding="async"
+            @load="onImageLoad"
+            @error="onImageError"
           />
           <div v-if="item.alt" class="carousel-caption">
             <p>{{ item.alt }}</p>
@@ -34,6 +36,14 @@
         <pagination />
       </template>
     </carousel>
+    
+    <!-- Mostrar spinner mientras carga -->
+    <div v-else-if="isLoading" class="carousel-loading">
+      <div class="spinner-border text-success" role="status">
+        <span class="visually-hidden">Cargando imágenes...</span>
+      </div>
+      <p class="mt-2">Cargando galería de imágenes...</p>
+    </div>
   </div>
 </template>
 
@@ -63,10 +73,8 @@ export default {
     this.isMobile = window.innerWidth <= 768;
     window.addEventListener('resize', this.handleResize);
     
-    // Cargar imágenes con pequeño delay para evitar congelamiento
-    setTimeout(() => {
-      this.fetchImagesFromNetlifyFunction();
-    }, 100);
+    // Cargar imágenes INMEDIATAMENTE (sin delay)
+    this.fetchImagesFromNetlifyFunction();
   },
   beforeUnmount() {
     window.removeEventListener('resize', this.handleResize);
@@ -83,8 +91,8 @@ export default {
 
       try {
         const controller = new AbortController();
-        // En móvil usar timeout más corto pero no tanto
-        const timeout = this.isMobile ? 8000 : 12000;
+        // Timeout más corto para respuesta rápida
+        const timeout = 6000; // 6 segundos máximo
         const timeoutId = setTimeout(() => controller.abort(), timeout);
 
         const response = await fetch('/.netlify/functions/pexels-images', {
@@ -92,42 +100,34 @@ export default {
         });
 
         clearTimeout(timeoutId);
-        const data = await response.json();
-
+        
         if (!response.ok) {
-          throw new Error(data.message || `Error HTTP! estado: ${response.status}`);
+          throw new Error(`Error HTTP ${response.status}`);
         }
 
+        const data = await response.json();
+
         if (data.images && data.images.length > 0) {
-          // En móvil: máximo 3 imágenes (menos carga), en desktop: máximo 6
-          const maxImages = this.isMobile ? 3 : 6;
-          this.items = data.images.slice(0, maxImages).map((img, index) => ({
-            ...img,
-            id: img.id || `img-${index}`,
-            // Optimizar URLs de imágenes para móvil
-            image: this.isMobile ? this.optimizeImageUrl(img.image) : img.image
-          }));
+          // Mostrar imágenes inmediatamente (no esperar a que carguen todas)
+          this.items = data.images;
+          this.isLoading = false; // IMPORTANTE: terminar carga aquí
         } else {
-          console.warn('Netlify Function: No images returned.');
           this.items = [];
+          this.isLoading = false;
         }
 
       } catch (err) {
         console.error('Error al obtener imágenes:', err);
-        if (err.name === 'AbortError') {
-          this.error = 'Timeout al cargar imágenes. Intenta recargando la página.';
-        } else {
-          this.error = 'No se pudieron cargar las imágenes.';
-        }
+        this.error = 'Las imágenes están tardando demasiado. Intenta recargando.';
         this.items = [];
-      } finally {
         this.isLoading = false;
       }
     },
-    optimizeImageUrl(url) {
-      // Reducir calidad y tamaño en móvil
-      // Si es de Pexels, mantener la URL pero confiar en decoding async
-      return url;
+    onImageLoad() {
+      this.imagesLoaded++;
+    },
+    onImageError(e) {
+      console.error('Error al cargar imagen:', e);
     }
   }
         } else {

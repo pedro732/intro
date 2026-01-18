@@ -16,52 +16,55 @@ exports.handler = async function(event, context) {
     // Crea el cliente de Pexels
     const client = createClient(apiKey);
 
-    // Define los parámetros de búsqueda.
-    // Puedes hacer una búsqueda por palabras clave o obtener fotos curadas.
-    // Para obtener imágenes de "animales, ciencia y tecnología", una búsqueda es más flexible.
-    const query = 'animals, science, technology,nature,tree,animal'; // Palabras clave para la búsqueda
-    const perPage = 30; // Número de imágenes por página (ajusta según necesites)
-    const page = 1; // Página de resultados
+    // Define los parámetros de búsqueda - OPTIMIZADO PARA MÓVIL
+    const query = 'nature'; // Una sola palabra = respuesta más rápida desde Pexels
+    const perPage = 4; // REDUCIDO: 30 → 4 (4 imágenes es suficiente para todos los dispositivos)
+    const page = 1;
 
     let photos;
 
-    // Puedes elegir entre buscar (search) o curadas (curated)
-    // Usaremos search para las palabras clave
-    const response = await client.photos.search({ query, per_page: perPage, page: page });
+    // Buscar imágenes
+    const response = await client.photos.search({ 
+      query, 
+      per_page: perPage, 
+      page: page,
+      orientation: 'landscape' // Solo imágenes horizontales (más rápido)
+    });
 
     if (response.error) {
-        console.error('Pexels API Error:', response.error);
-         return {
-            statusCode: 500,
-            body: JSON.stringify({ message: 'Error fetching photos from Pexels API', error: response.error }),
-        };
+      console.error('Pexels API Error:', response.error);
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ message: 'Error fetching photos from Pexels API', error: response.error }),
+      };
     }
 
     photos = response.photos;
 
-
     if (!photos || photos.length === 0) {
-        console.warn('Pexels API: No photos found.');
-        return {
-            statusCode: 200,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ images: [] }), // Devuelve un array vacío si no hay fotos
-        };
+      console.warn('Pexels API: No photos found.');
+      return {
+        statusCode: 200,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ images: [] }),
+      };
     }
 
-    // Mapea los resultados para enviar solo los datos necesarios al frontend
+    // Mapea los resultados - OPTIMIZADO PARA VELOCIDAD
     const images = photos.map(photo => ({
-      // Puedes elegir diferentes tamaños: original, large, large2x, medium, small, portrait, landscape, tiny
-      image: photo.src.large, // Usamos el tamaño 'large'
-      alt: photo.alt, // Usamos el texto alternativo proporcionado por Pexels
-      id: photo.id // Un ID único para la key en el v-for
+      // CAMBIO CRÍTICO: large → medium (reduce 60-70% del tamaño)
+      image: photo.src.medium, // ~300-500KB en lugar de 1-3MB
+      thumbnail: photo.src.small, // Para carga rápida inicial
+      alt: photo.alt || 'Imagen científica',
+      id: photo.id
     }));
 
-    // Devuelve las URLs de las imágenes
+    // Devuelve con headers de caché
     return {
       statusCode: 200,
       headers: {
         'Content-Type': 'application/json',
+        'Cache-Control': 'public, max-age=3600' // Cachear 1 hora
       },
       body: JSON.stringify({ images: images }),
     };
@@ -74,3 +77,4 @@ exports.handler = async function(event, context) {
     };
   }
 };
+
