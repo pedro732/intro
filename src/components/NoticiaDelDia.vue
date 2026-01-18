@@ -1,16 +1,19 @@
 # File: src/components/NoticiaDelDia.vue
 <template>
-    <div class="noticia-container"> <!-- Contenedor principal con nueva clase -->
-        <h2>Noticias de New York Times</h2> <!-- Título añadido -->
+    <div class="noticia-container">
+        <h2>Noticias de New York Times</h2>
         <p>Selecciona el periodo: 1, 7 o 30 días, para acceder a las noticias de New York Times</p>
-      <form @submit.prevent="buscarNoticias" class="search-form"> <!-- Añadida clase search-form al form -->
-        <select v-model="periodo">
+      <form @submit.prevent="buscarNoticias" class="search-form">
+        <select v-model="periodo" :disabled="isLoading">
           <option value="1">1 día</option>
           <option value="7">7 días</option>
           <option value="30">30 días</option>
         </select>
-        <button type="submit">Buscar</button>
+        <button type="submit" :disabled="isLoading">
+          {{ isLoading ? 'Cargando...' : 'Buscar' }}
+        </button>
       </form>
+      <p v-if="error" class="error-text">{{ error }}</p>
       <div class="card" v-for="(noticia, index) in noticias" :key="index">
         <h5 class="card-title">{{ noticia.title }}</h5>
         <p class="card-text">{{ noticia.abstract }}</p>
@@ -27,11 +30,15 @@ export default {
   data() {
     return {
       periodo: '1',
-      noticias: []
+      noticias: [],
+      isLoading: false,
+      error: null
     }
   },
   methods: {
     async buscarNoticias() {
+      this.isLoading = true;
+      this.error = null;
       try {
         const response = await axios.get(
           `https://api.nytimes.com/svc/mostpopular/v2/emailed/${this.periodo}.json?api-key=uH8o2jLEGywyqdBAZ95JO7L9sA9ATN5x`,
@@ -42,7 +49,10 @@ export default {
         this.noticias = response.data.results || [];
       } catch (error) {
         console.warn('Error al obtener noticias:', error.message);
+        this.error = 'No se pudieron cargar las noticias. Intenta de nuevo.';
         this.noticias = [];
+      } finally {
+        this.isLoading = false;
       }
     }
   }

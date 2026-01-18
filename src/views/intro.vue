@@ -41,7 +41,8 @@
       <VistaTarjeta/>
       <inteligencia-artificial/>
       <!-- Indicadores Económicos removido por ser lento -->
-      <FotoDelDia/>
+      <!-- FotoDelDia comentado temporalmente para debugging del bloqueo en iPhone -->
+      <!-- <FotoDelDia/> -->
       <NoticiaDelDia/>
       <PieDePagina/>
     </div>
