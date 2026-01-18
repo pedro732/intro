@@ -37,7 +37,7 @@
     <!-- Página principal -->
     <div v-show="!mostrarIntro && !mostrarEtapas && !mostrarEcosistemas && !mostrarEcosistemas2 && !mostrarEsquema">
       <BarraNavegacion />
-      <CarruselApi/>
+      <CarruselApi />
       <VistaTarjeta/>
       <inteligencia-artificial/>
       <IndicadoresEconomicos/>
@@ -58,12 +58,12 @@ import EcosistemasModal from '../components/EcosistemasModal.vue'
 import EcosistemasModal2 from '../components/EcosistemasModal2.vue'
 import EsquemaMetodo from '../components/EsquemaMetodo.vue'
 
-// Lazy loading para componentes pesados que se cargan después del scroll
-const CarruselApi = () => import(/* webpackChunkName: "carrusel" */ '../components/carruselApi.vue')
-const InteligenciaArtificial = () => import(/* webpackChunkName: "ia" */ '@/components/InteligenciaArtificial.vue')
-const IndicadoresEconomicos = () => import(/* webpackChunkName: "indicadores" */ '../components/indicadores.vue')
-const FotoDelDia = () => import(/* webpackChunkName: "foto" */ '../components/FotodelDia.vue')
-const NoticiaDelDia = () => import(/* webpackChunkName: "noticia" */ '../components/NoticiaDelDia.vue')
+// Importar todos los componentes normalmente
+import CarruselApi from '../components/carruselApi.vue'
+import InteligenciaArtificial from '@/components/InteligenciaArtificial.vue'
+import IndicadoresEconomicos from '../components/indicadores.vue'
+import FotoDelDia from '../components/FotodelDia.vue'
+import NoticiaDelDia from '../components/NoticiaDelDia.vue'
 
 export default {
   name: 'CienciaIntro',

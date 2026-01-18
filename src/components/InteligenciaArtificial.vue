@@ -36,29 +36,33 @@ export default {
       iaResponse: null,
       error: null,
       isLoading: false,
+      isMobile: false,
     };
   },
+  mounted() {
+    // Detectar si es móvil
+    this.isMobile = window.innerWidth <= 768;
+    window.addEventListener('resize', this.handleResize);
+  },
+  beforeUnmount() {
+    window.removeEventListener('resize', this.handleResize);
+  },
   watch: {
-    // Observa los cambios en iaResponse
     iaResponse(newValue) {
-      // Si hay una nueva respuesta (no nula)
       if (newValue) {
-        // Espera a que Vue actualice el DOM
         this.$nextTick(() => {
-          // Verifica si MathJax está disponible globalmente
           if (window.MathJax) {
-            // Procesa el contenido del área de respuesta específica
-            // MathJax.typesetPromise() devuelve una promesa
             window.MathJax.typesetPromise([this.$refs.responseArea])
               .catch((err) => console.error('MathJax typesetting failed:', err));
-          } else {
-            console.warn('MathJax no está cargado.');
           }
         });
       }
     }
   },
   methods: {
+    handleResize() {
+      this.isMobile = window.innerWidth <= 768;
+    },
     async sendMessage() {
       if (!this.userMessage.trim()) {
         return;
@@ -70,7 +74,9 @@ export default {
 
       try {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 15000); // Timeout de 15 segundos
+        // Timeout adaptativo: más corto en móvil, más largo en desktop
+        const timeoutMs = this.isMobile ? 10000 : 20000;
+        const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
         const response = await fetch('/.netlify/functions/mistral-chat', {
           method: 'POST',

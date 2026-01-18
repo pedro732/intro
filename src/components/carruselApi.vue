@@ -49,15 +49,24 @@ export default {
       items: [],
       isLoading: true,
       error: null,
+      isMobile: false,
     };
   },
   mounted() {
-    // Usar nextTick para diferir la carga si es necesario
-    this.$nextTick(() => {
-      this.fetchImagesFromNetlifyFunction();
-    });
+    // Detectar si es móvil
+    this.isMobile = window.innerWidth <= 768;
+    window.addEventListener('resize', this.handleResize);
+    
+    // Cargar imágenes
+    this.fetchImagesFromNetlifyFunction();
+  },
+  beforeUnmount() {
+    window.removeEventListener('resize', this.handleResize);
   },
   methods: {
+    handleResize() {
+      this.isMobile = window.innerWidth <= 768;
+    },
     async fetchImagesFromNetlifyFunction() {
       this.isLoading = true;
       this.error = null;
@@ -65,7 +74,9 @@ export default {
 
       try {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 8000); // Timeout de 8 segundos
+        // En móvil usar timeout más corto
+        const timeout = this.isMobile ? 5000 : 8000;
+        const timeoutId = setTimeout(() => controller.abort(), timeout);
 
         const response = await fetch('/.netlify/functions/pexels-images', {
           signal: controller.signal
@@ -79,16 +90,21 @@ export default {
         }
 
         if (data.images && data.images.length > 0) {
-          // Limitar a 6 imágenes para reducir consumo de memoria
-          this.items = data.images.slice(0, 6);
+          // En móvil: máximo 4 imágenes, en desktop: máximo 8
+          const maxImages = this.isMobile ? 4 : 8;
+          this.items = data.images.slice(0, maxImages);
         } else {
           console.warn('Netlify Function: No images returned.');
           this.items = [];
         }
 
       } catch (err) {
-        console.error('Error al obtener imágenes de la función Netlify:', err);
-        this.error = 'No se pudieron cargar las imágenes.';
+        console.error('Error al obtener imágenes:', err);
+        if (err.name === 'AbortError') {
+          this.error = 'Timeout al cargar imágenes';
+        } else {
+          this.error = 'No se pudieron cargar las imágenes';
+        }
         this.items = [];
       } finally {
         this.isLoading = false;
@@ -135,11 +151,17 @@ export default {
 }
 
 .carousel__slide img {
-  height: 400px;
   width: 100%;
   object-fit: cover;
   transition: transform 0.3s ease;
   will-change: transform;
+}
+
+/* Altura responsiva */
+@media (min-width: 769px) {
+  .carousel__slide img {
+    height: 400px;
+  }
 }
 
 @media (max-width: 768px) {

@@ -59,27 +59,43 @@
         selectedDate: '',
         selectedIndicatorData: null,
         indicatorOptions: ['uf', 'ivp', 'dolar', 'dolar_intercambio', 'euro', 'ipc', 'utm', 'imacec', 'tpm', 'libra_cobre', 'tasa_desempleo', 'bitcoin'],
+        isMobile: false,
       };
     },
     mounted() {
-      // Cambiar de created() a mounted() y hacer la carga no bloqueante
+      // Detectar si es móvil
+      this.isMobile = window.innerWidth <= 768;
+      window.addEventListener('resize', this.handleResize);
+      
+      // Cargar indicadores de forma no bloqueante
       this.loadIndicators();
     },
+    beforeUnmount() {
+      window.removeEventListener('resize', this.handleResize);
+    },
     methods: {
+      handleResize() {
+        this.isMobile = window.innerWidth <= 768;
+      },
       async loadIndicators() {
         try {
           const indicatorsNames = ['uf', 'dolar', 'euro', 'utm'];
           const symbols = ['$', '$', '€', '$'];
+          
+          // Usar timeout diferente según dispositivo
+          const timeout = this.isMobile ? 3000 : 5000;
+          
           const indicatorsData = await Promise.all(
             indicatorsNames.map((name) =>
-              axios.get(`https://mindicador.cl/api/${name}`, { timeout: 5000 })
+              axios.get(`https://mindicador.cl/api/${name}`, { timeout })
                 .then((res) => res.data)
                 .catch((err) => {
-                  console.warn(`Error cargando ${name}:`, err);
+                  console.warn(`Error cargando ${name}:`, err.message);
                   return null;
                 })
             )
           );
+          
           this.indicators = indicatorsData
             .map((data, index) => {
               if (data && data.serie && data.serie.length > 0) {
@@ -100,7 +116,10 @@
         try {
           const dateParts = this.selectedDate.split('-');
           const formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
-          const response = await axios.get(`https://mindicador.cl/api/${this.selectedIndicator}/${formattedDate}`, { timeout: 5000 });
+          
+          const timeout = this.isMobile ? 3000 : 5000;
+          const response = await axios.get(`https://mindicador.cl/api/${this.selectedIndicator}/${formattedDate}`, { timeout });
+          
           const data = response.data;
           if (data.serie && data.serie.length > 0) {
             this.selectedIndicatorData = {
@@ -110,6 +129,8 @@
             };
           } else {
             console.error('No data available for this date and indicator');
+            alert('No hay datos disponibles para esa fecha');
+            return;
           }
           var modal = new Modal(document.getElementById('indicadorModal'))
           modal.show()
