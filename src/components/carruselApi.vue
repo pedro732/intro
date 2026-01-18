@@ -81,7 +81,6 @@ export default {
   }
 }
 </script>
-</script>
 
 <style scoped>
 .carrusel-api-container {
