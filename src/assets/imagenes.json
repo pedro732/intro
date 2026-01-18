@@ -1,0 +1,54 @@
+{
+  "images": [
+    {
+      "id": 1,
+      "image": "https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=600&h=400&fit=crop",
+      "alt": "Naturaleza selvática con vegetación exuberante"
+    },
+    {
+      "id": 2,
+      "image": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&h=400&fit=crop",
+      "alt": "Montañas nevadas con cielo azul"
+    },
+    {
+      "id": 3,
+      "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop",
+      "alt": "Cascada natural en bosque tropical"
+    },
+    {
+      "id": 4,
+      "image": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&h=400&fit=crop",
+      "alt": "Paisaje de montañas al atardecer"
+    },
+    {
+      "id": 5,
+      "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop",
+      "alt": "Ecosistema forestal biodiverso"
+    },
+    {
+      "id": 6,
+      "image": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&h=400&fit=crop",
+      "alt": "Fauna silvestre en su hábitat natural"
+    },
+    {
+      "id": 7,
+      "image": "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=600&h=400&fit=crop",
+      "alt": "Cielo estrellado nocturno"
+    },
+    {
+      "id": 8,
+      "image": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&h=400&fit=crop",
+      "alt": "Agua cristalina en laguna alpina"
+    },
+    {
+      "id": 9,
+      "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop",
+      "alt": "Flora selvática y biodiversidad"
+    },
+    {
+      "id": 10,
+      "image": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&h=400&fit=crop",
+      "alt": "Paisaje natural preservado"
+    }
+  ]
+}

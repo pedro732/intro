@@ -1,25 +1,12 @@
 # File: src/components/carruselApi.vue
 <template>
   <div class="carrusel-api-container">
-    <h2>Imágenes de Pexels</h2>
+    <h2>Imágenes Científicas</h2>
 
-    <!-- Mostrar spinner mientras carga -->
-    <div v-if="isLoading && items.length === 0" class="carousel-loading">
-      <div class="spinner-border text-success" role="status">
-        <span class="visually-hidden">Cargando imágenes...</span>
-      </div>
-      <p class="mt-2">Cargando galería de imágenes...</p>
-    </div>
-
-    <!-- Mostrar error si no se puede cargar -->
-    <div v-else-if="error && items.length === 0" class="error-message">
-      Error al cargar imágenes: {{ error }}
-    </div>
-
-    <!-- Mostrar carrusel si hay imágenes -->
+    <!-- Carrusel con imágenes locales -->
     <carousel 
-      v-else-if="items.length > 0"
-      :autoplay="isMobile ? 5000 : 10000"
+      v-if="items.length > 0"
+      :autoplay="isMobile ? 4000 : 8000"
       :wrap-around="true"
       :items-to-show="1"
       :transition="200"
@@ -29,12 +16,12 @@
         <div class="slide-content">
           <img
             :src="item.image"
-            :alt="item.alt || 'Imagen científica'"
-            class="d-block w-100"
+            :alt="item.alt"
+            class="carousel-image"
             loading="lazy"
             decoding="async"
           />
-          <div v-if="item.alt" class="carousel-caption">
+          <div class="carousel-caption">
             <p>{{ item.alt }}</p>
           </div>
         </div>
@@ -45,12 +32,18 @@
         <pagination />
       </template>
     </carousel>
+
+    <!-- Error si no hay imágenes -->
+    <div v-else class="error-message">
+      No se pudieron cargar las imágenes
+    </div>
   </div>
 </template>
 
 <script>
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel';
 import 'vue3-carousel/dist/carousel.css';
+import imagenes from '@/assets/imagenes.json';
 
 export default {
   name: 'VistaCarruselApi',
@@ -63,10 +56,7 @@ export default {
   data() {
     return {
       items: [],
-      isLoading: true,
-      error: null,
-      isMobile: false,
-      imagesLoaded: 0,
+      isMobile: false
     };
   },
   mounted() {
@@ -74,8 +64,8 @@ export default {
     this.isMobile = window.innerWidth <= 768;
     window.addEventListener('resize', this.handleResize);
     
-    // Cargar imágenes INMEDIATAMENTE
-    this.fetchImagesFromNetlifyFunction();
+    // Cargar imágenes del JSON local inmediatamente
+    this.loadLocalImages();
   },
   beforeUnmount() {
     window.removeEventListener('resize', this.handleResize);
@@ -84,55 +74,13 @@ export default {
     handleResize() {
       this.isMobile = window.innerWidth <= 768;
     },
-    async fetchImagesFromNetlifyFunction() {
-      this.isLoading = true;
-      this.error = null;
-      this.items = [];
-
-      try {
-        // Timeout muy corto - 5 segundos máximo
-        const controller = new AbortController();
-        const timeout = 5000;
-        const timeoutId = setTimeout(() => controller.abort(), timeout);
-
-        const response = await fetch('/.netlify/functions/pexels-images', {
-          signal: controller.signal
-        });
-
-        clearTimeout(timeoutId);
-        
-        if (!response.ok) {
-          throw new Error(`Error HTTP ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        if (data.images && data.images.length > 0) {
-          // Mostrar imágenes inmediatamente
-          this.items = data.images;
-        } else {
-          this.items = [];
-          this.error = 'No se encontraron imágenes';
-        }
-
-      } catch (err) {
-        console.error('Error al obtener imágenes:', err);
-        this.error = err.name === 'AbortError' 
-          ? 'La carga de imágenes tardó demasiado. Intenta recargando.' 
-          : 'Error al cargar las imágenes';
-        this.items = [];
-      } finally {
-        this.isLoading = false;
-      }
-    },
-    onImageLoad() {
-      // No necesario por ahora
-    },
-    onImageError() {
-      // No necesario por ahora
+    loadLocalImages() {
+      // Cargar imágenes del JSON - instantáneo, sin API
+      this.items = imagenes.images;
     }
   }
 }
+</script>
 </script>
 
 <style scoped>

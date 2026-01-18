@@ -32,11 +32,18 @@ export default {
   },
   methods: {
     async buscarNoticias() {
-      // Asegúrate de que tu clave de API de NYT esté segura si la usas en producción.
-      // Idealmente, esto también debería ir a través de una función serverless.
-      const response = await axios.get(`https://api.nytimes.com/svc/mostpopular/v2/emailed/${this.periodo}.json?api-key=uH8o2jLEGywyqdBAZ95JO7L9sA9ATN5x`);
-      //console.log(response.data);
-      this.noticias = response.data.results;
+      try {
+        const response = await axios.get(
+          `https://api.nytimes.com/svc/mostpopular/v2/emailed/${this.periodo}.json?api-key=uH8o2jLEGywyqdBAZ95JO7L9sA9ATN5x`,
+          {
+            timeout: 5000  // Timeout de 5 segundos
+          }
+        );
+        this.noticias = response.data.results || [];
+      } catch (error) {
+        console.warn('Error al obtener noticias:', error.message);
+        this.noticias = [];
+      }
     }
   }
 }
