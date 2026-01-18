@@ -128,7 +128,7 @@ export default {
     onImageLoad() {
       // No necesario por ahora
     },
-    onImageError(e) {
+    onImageError() {
       // No necesario por ahora
     }
   }
