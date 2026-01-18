@@ -69,22 +69,23 @@ export default {
   name: 'BarraNavegacion',
   methods: {
     closeMenu() {
-      // Cerrar el menú después de hacer click - método más robusto
+      // Cerrar el menú después de hacer click - versión mejorada para mobile
       try {
         const navbarCollapse = document.getElementById('navbarNav');
         const toggleBtn = document.querySelector('.navbar-toggler');
         
-        if (navbarCollapse && toggleBtn) {
-          // Si el menú está visible, cerrarlo
-          if (navbarCollapse.classList.contains('show')) {
-            // Usar Bootstrap's collapse API si está disponible
-            if (window.bootstrap && window.bootstrap.Collapse) {
-              new window.bootstrap.Collapse(navbarCollapse, {
-                toggle: true
-              });
-            } else {
-              // Fallback: click al botón
-              toggleBtn.click();
+        if (navbarCollapse && toggleBtn && navbarCollapse.classList.contains('show')) {
+          // Método 1: Remover clase show directamente (más confiable en mobile)
+          navbarCollapse.classList.remove('show');
+          // Actualizar atributo aria-expanded
+          toggleBtn.setAttribute('aria-expanded', 'false');
+          
+          // Método 2: Usar Bootstrap API como fallback
+          if (window.bootstrap && window.bootstrap.Collapse) {
+            try {
+              new window.bootstrap.Collapse(navbarCollapse, { toggle: false });
+            } catch (e) {
+              // Silenciar error de Bootstrap
             }
           }
         }
