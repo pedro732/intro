@@ -74,8 +74,8 @@ export default {
 
       try {
         const controller = new AbortController();
-        // Timeout adaptativo: más corto en móvil, más largo en desktop
-        const timeoutMs = this.isMobile ? 10000 : 20000;
+        // Timeout muy agresivo para evitar bloqueos
+        const timeoutMs = this.isMobile ? 5000 : 10000;
         const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
         const response = await fetch('/.netlify/functions/mistral-chat', {
