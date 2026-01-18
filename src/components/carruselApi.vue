@@ -75,9 +75,16 @@ export default {
       this.isMobile = window.innerWidth <= 768;
     },
     loadLocalImages() {
-      // Cargar imágenes del JSON - instantáneo, sin API
-      this.items = imagenes.images;
+      // Cargar imágenes del JSON - forzar reactividad usando spread operator
+      // Esto asegura que Vue detecte el cambio incluso en Mac/Chrome
+      const imagenesArray = imagenes.images || [];
+      // Forzar reactivamente asignando un nuevo array
+      this.items = [...imagenesArray];
+      
       console.log('Carrusel cargado con', this.items.length, 'imágenes:', this.items);
+      
+      // Forzar re-render si es necesario
+      this.$forceUpdate();
     }
   }
 }
