@@ -1,54 +1,54 @@
 {
   "images": [
     {
-      "id": "img-1",
-      "image": "https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=800&h=500&fit=crop",
-      "alt": "Naturaleza selvática con vegetación exuberante"
+      "id": "nature-1",
+      "image": "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+      "alt": "Bosque de pinos con niebla"
     },
     {
-      "id": "img-2",
-      "image": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=500&fit=crop",
-      "alt": "Montañas nevadas con cielo azul"
+      "id": "nature-2",
+      "image": "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=800&q=80",
+      "alt": "Río en bosque verde"
     },
     {
-      "id": "img-3",
-      "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=500&fit=crop",
-      "alt": "Cascada natural en bosque tropical"
+      "id": "nature-3",
+      "image": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=800&q=80",
+      "alt": "Montañas y lago al amanecer"
     },
     {
-      "id": "img-4",
-      "image": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=500&fit=crop",
-      "alt": "Bosque denso y frondoso"
+      "id": "nature-4",
+      "image": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=800&q=80",
+      "alt": "Campo de flores silvestres"
     },
     {
-      "id": "img-5",
-      "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=500&fit=crop",
-      "alt": "Paisaje montañoso al atardecer"
+      "id": "nature-5",
+      "image": "https://images.unsplash.com/photo-1508672019048-805c876b67e2?auto=format&fit=crop&w=800&q=80",
+      "alt": "Oso panda comiendo bambú"
     },
     {
-      "id": "img-6",
-      "image": "https://images.unsplash.com/photo-1469022563149-aa64dbd37dae?w=800&h=500&fit=crop",
-      "alt": "Fauna silvestre en su hábitat natural"
+      "id": "nature-6",
+      "image": "https://images.pexels.com/photos/417173/pexels-photo-417173.jpeg?auto=compress&w=800",
+      "alt": "Cascada en bosque tropical"
     },
     {
-      "id": "img-7",
-      "image": "https://images.unsplash.com/photo-1444080748397-f442aa95c3e5?w=800&h=500&fit=crop",
-      "alt": "Cielo estrellado nocturno"
+      "id": "nature-7",
+      "image": "https://images.pexels.com/photos/34950/pexels-photo.jpg?auto=compress&w=800",
+      "alt": "Cielo azul y montañas verdes"
     },
     {
-      "id": "img-8",
-      "image": "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800&h=500&fit=crop",
-      "alt": "Agua cristalina en laguna alpina"
+      "id": "nature-8",
+      "image": "https://images.pexels.com/photos/355465/pexels-photo-355465.jpeg?auto=compress&w=800",
+      "alt": "Lago rodeado de árboles en otoño"
     },
     {
-      "id": "img-9",
-      "image": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=500&fit=crop",
-      "alt": "Flora selvática y biodiversidad"
+      "id": "nature-9",
+      "image": "https://images.pexels.com/photos/417142/pexels-photo-417142.jpeg?auto=compress&w=800",
+      "alt": "Playa y mar turquesa"
     },
     {
-      "id": "img-10",
-      "image": "https://images.unsplash.com/photo-1511379938547-c1f69b13d835?w=800&h=500&fit=crop",
-      "alt": "Ecosistema forestal preservado"
+      "id": "nature-10",
+      "image": "https://images.pexels.com/photos/459225/pexels-photo-459225.jpeg?auto=compress&w=800",
+      "alt": "Pradera con flores y cielo despejado"
     }
   ]
 }
