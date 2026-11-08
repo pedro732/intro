@@ -26,7 +26,7 @@
           <li class="nav-item">
             <a 
               class="nav-link" 
-              href="https://studio--educacin-y-ciencia.us-central1.hosted.app/" 
+              href="https://ciencias.ai.studio//" 
               target="_blank"
               @click="closeMenu"
             >
